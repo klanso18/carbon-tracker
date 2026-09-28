@@ -62,7 +62,7 @@ export default function Login() {
           dernières activitées!
         </Typography>
         <form onSubmit={handleSubmit} className='py-4'>
-          <div className='w-[450px]'>
+          <div className='w-full sm:w-[450px]'>
             <InputLabel
               name='email'
               label='email'
@@ -73,7 +73,7 @@ export default function Login() {
               required
             />
           </div>
-          <div className='mt-4 w-[450px]'>
+          <div className='mt-4 w-full sm:w-[450px]'>
             <InputLabel
               name='password'
               label='mot de passe'

@@ -7,22 +7,23 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main className='fixed top-0 left-0 flex w-screen h-screen px-20 py-32 text-black 2xl:px-60'>
-      <div className='items-center justify-end hidden w-1/2 h-full pr-10 lg:flex'>
-        <div>
-          <Image
-            src='/login-img.webp'
-            alt='User on computer with carbon footprint tracking app'
-            width={500}
-            height={500}
-            className='rounded-xl'
-            style={{ width: '100%', height: 'auto' }}
-            priority
-          />
-        </div>
+    <main className='fixed top-0 left-0 w-screen h-screen bg-dark_green text-black'>
+      <div className='absolute inset-0 hidden lg:block'>
+        <Image
+          src='/carbon-tracker-bg.jpg'
+          alt='Jeune pousse verte émergeant de la terre, symbole de la croissance des bonnes habitudes écologiques'
+          fill
+          sizes='100vw'
+          className='object-cover'
+          priority
+        />
+        <div className='absolute inset-0 bg-gradient-to-r from-transparent via-dark_green/60 to-dark_green' />
       </div>
-      <div className='flex items-center justify-center w-full h-full pl-10 lg:justify-start lg:w-1/2 lg:pb-10 xl:pb-16'>
-        {children}
+
+      <div className='relative z-10 flex items-center justify-center w-full h-full px-6 py-10 lg:justify-end lg:px-16 xl:px-24 2xl:px-32'>
+        <div className='w-full max-w-xl px-6 py-8 shadow-2xl bg-very_light_grey/95 backdrop-blur-sm rounded-3xl sm:px-10 sm:py-10'>
+          {children}
+        </div>
       </div>
     </main>
   );
