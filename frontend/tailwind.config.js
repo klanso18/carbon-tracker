@@ -8,6 +8,8 @@ module.exports = {
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        aclonica: ['Aclonica', 'sans-serif'],
+        funnel: ['"Funnel Sans"', 'sans-serif'],
       },
       colors: {
         "dark_green": "#03170C",
