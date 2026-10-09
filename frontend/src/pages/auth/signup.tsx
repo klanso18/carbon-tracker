@@ -73,12 +73,12 @@ export default function Signup() {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout variant='outline'>
       <div className='flex flex-col items-center lg:items-start py-6'>
-        <Typography customClass='text-4xl lg:text-3xl xl:text-5xl font-semibold'>
+        <Typography customClass='!font-aclonica text-4xl lg:text-3xl xl:text-5xl text-white text-center lg:text-left w-full'>
           Inscription ✍️
         </Typography>
-        <Typography customClass='hidden lg:block lg:text-start text-sm lg:text-md xl:text-lg font-light text-medium_green mt-2 w-5/6'>
+        <Typography customClass='hidden lg:block font-poppins lg:text-start text-sm lg:text-md xl:text-lg font-light text-white mt-2 w-5/6'>
           Suis ton empreinte carbone, commence dès maintenant à renseigner tes
           dernières activités !
         </Typography>
@@ -94,6 +94,8 @@ export default function Signup() {
               onChange={(e) => setEmail(e.target.value)}
               autoComplete='email'
               required
+              labelClassName='!text-white'
+              className='!text-white !ring-white/40 bg-white/5 placeholder:!text-white/50'
             />
           </div>
           <div className='mt-3 w-full sm:w-[300px]'>
@@ -107,6 +109,8 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               autoComplete='new-password'
               required
+              labelClassName='!text-white'
+              className='!text-white !ring-white/40 bg-white/5 placeholder:!text-white/50'
             />
           </div>
           <div className='mt-3 w-full sm:w-[300px]'>
@@ -120,6 +124,8 @@ export default function Signup() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete='new-password'
               required
+              labelClassName='!text-white'
+              className='!text-white !ring-white/40 bg-white/5 placeholder:!text-white/50'
             />
           </div>
           <InputCheckbox
@@ -129,9 +135,15 @@ export default function Signup() {
             checked={acceptedTerms}
             onChange={(e) => setAcceptedTerms(e.target.checked)}
             required
+            labelClassName='!text-white'
+            inputClassName='!border-white/50 !text-medium_green focus:!ring-medium_green'
           />
           <div className='w-full flex justify-center items-center lg:justify-start'>
-            <Button className='mt-2' size='xl' type='submit'>
+            <Button
+              className='mt-2 bg-transparent border border-white text-white rounded-[10px] hover:bg-white/10 font-poppins !font-light'
+              size='xl'
+              type='submit'
+            >
               {loading ? 'En cours...' : 'Envoyer'}
             </Button>
           </div>
@@ -143,12 +155,15 @@ export default function Signup() {
           className='flex items-center'
           onClick={() => router.push('/auth/login')}
         >
-          <Typography variant='paragraph' className='cursor-default'>
+          <Typography
+            variant='paragraph'
+            className='font-poppins font-light text-white cursor-default'
+          >
             Déjà inscrit ?
           </Typography>
           <Typography
             variant='paragraph'
-            className='font-semibold pl-2 cursor-pointer text-medium_green'
+            className='font-poppins font-semibold pl-2 cursor-pointer text-light_green'
           >
             Connecte toi
           </Typography>

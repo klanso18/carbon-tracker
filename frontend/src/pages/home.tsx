@@ -8,7 +8,7 @@ export default function HomePage() {
   const router = useRouter();
 
   return (
-    <AuthLayout transparent>
+    <AuthLayout variant='plain'>
       <div className='flex flex-col items-center w-full py-6'>
         <Image
           src='/logo-ct.png'

@@ -5,6 +5,8 @@ interface InputCheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   className?: string;
+  inputClassName?: string;
+  labelClassName?: string;
   partiallyChecked?: boolean;
 }
 
@@ -12,6 +14,8 @@ export default function InputCheckbox({
   id,
   label,
   className,
+  inputClassName,
+  labelClassName,
   partiallyChecked = false,
   ...props
 }: InputCheckboxProps) {
@@ -36,12 +40,18 @@ export default function InputCheckbox({
           aria-describedby={`${id}-description`}
           name={id}
           type='checkbox'
-          className='h-4 w-4 rounded cursor-pointer border-gray-300 text-indigo-600 focus:ring-indigo-600'
+          className={clsx(
+            'h-4 w-4 rounded cursor-pointer border-gray-300 text-indigo-600 focus:ring-indigo-600',
+            inputClassName,
+          )}
           {...props}
         />
       </div>
       <div className={labelClasses}>
-        <label htmlFor={id} className='font-normal text-gray-900'>
+        <label
+          htmlFor={id}
+          className={clsx('font-normal text-gray-900', labelClassName)}
+        >
           {label}
         </label>
       </div>

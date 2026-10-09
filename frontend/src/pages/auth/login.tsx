@@ -52,12 +52,12 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout variant='outline'>
       <div className='flex flex-col items-center lg:items-start py-6'>
-        <Typography customClass='text-4xl lg:text-3xl xl:text-5xl font-semibold'>
+        <Typography customClass='!font-aclonica text-4xl lg:text-3xl xl:text-5xl text-white text-center lg:text-left w-full'>
           Connexion 👋
         </Typography>
-        <Typography customClass='hidden lg:block lg:text-start text-sm lg:text-md xl:text-lg font-light text-medium_green mt-2 w-5/6'>
+        <Typography customClass='hidden lg:block font-poppins lg:text-start text-sm lg:text-md xl:text-lg font-light text-white mt-2 w-5/6'>
           Suis ton empreinte carbone, commence dès maintenant à renseigner tes
           dernières activitées!
         </Typography>
@@ -71,6 +71,8 @@ export default function Login() {
               sizes='xl'
               autoComplete='email'
               required
+              labelClassName='!text-white'
+              className='!text-white !ring-white/40 bg-white/5 placeholder:!text-white/50'
             />
           </div>
           <div className='mt-4 w-full sm:w-[450px]'>
@@ -82,16 +84,20 @@ export default function Login() {
               sizes='xl'
               autoComplete='current-password'
               required
+              labelClassName='!text-white'
+              className='!text-white !ring-white/40 bg-white/5 placeholder:!text-white/50'
             />
           </div>
           <InputCheckbox
             id='remember-login'
             label='se souvenir de moi'
             className='py-4'
+            labelClassName='!text-white'
+            inputClassName='!border-white/50 !text-medium_green focus:!ring-medium_green'
           />
           <div className='w-full flex justify-center items-center lg:justify-start'>
             <Button
-              className='mt-2'
+              className='mt-2 bg-transparent border border-white text-white rounded-[10px] hover:bg-white/10 font-poppins !font-light'
               size='xl'
               type='submit'
               data-testid='submit'
@@ -108,12 +114,15 @@ export default function Login() {
           className='flex items-center mt-2'
           onClick={() => router.push('/auth/signup')}
         >
-          <Typography variant='paragraph' className='cursor-default'>
+          <Typography
+            variant='paragraph'
+            className='font-poppins font-light text-white cursor-default'
+          >
             Pas encore inscrit ?
           </Typography>
           <Typography
             variant='paragraph'
-            className='font-semibold pl-2 cursor-pointer text-medium_green'
+            className='font-poppins font-semibold pl-2 cursor-pointer text-light_green'
           >
             Crée ton compte
           </Typography>
