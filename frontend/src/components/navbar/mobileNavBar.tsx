@@ -26,7 +26,7 @@ const Links = () => {
 
   return (
     <div className='w-full mt-5'>
-      <Link href='/' className='block p-2 max-w-fit'>
+      <Link href='/home' className='block p-2 max-w-fit'>
         <Typography variant='paragraph'>Home</Typography>
       </Link>
       <Link href='/activity-entries/list' className='block p-2 max-w-fit'>

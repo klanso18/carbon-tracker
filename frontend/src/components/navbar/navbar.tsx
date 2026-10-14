@@ -35,7 +35,7 @@ export default function navbar() {
   const navLink = [
     {
       name: 'home',
-      link: '/',
+      link: '/home',
       img: '/icons/home-icon.png',
       imgHover: '/icons/home-icon-hover.png',
     },
@@ -65,7 +65,7 @@ export default function navbar() {
         <div className='flex flex-col h-[98vh] min-h-fit bg-black text-white w-28 rounded-3xl items-center'>
           <div className='cirlce flex items-center justify-center mt-5 bg-white w-full'>
             <div className='w-[60%] p-2'>
-              <Link href='/'>
+              <Link href='/home'>
                 <img src='/icons/logo.png' alt='Logo' className='w-full' />
               </Link>
             </div>

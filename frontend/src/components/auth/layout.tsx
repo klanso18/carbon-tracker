@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -23,6 +24,23 @@ export default function AuthLayout({
         />
         <div className='absolute inset-0 bg-gradient-to-r from-transparent via-dark_green/60 to-dark_green' />
       </div>
+
+      {variant !== 'plain' && (
+        <Link
+          href='/'
+          className='absolute top-6 left-6 z-20 xl:top-8 xl:left-8 transition-transform duration-200 hover:scale-110 hover:opacity-80'
+          aria-label="Retour à l'accueil"
+        >
+          <Image
+            src='/logo-ct.png'
+            alt='Logo Carbon Tracker'
+            width={100}
+            height={115}
+            className='h-12 w-auto sm:h-14'
+            priority
+          />
+        </Link>
+      )}
 
       <div className='relative z-10 flex items-center justify-center w-full h-full px-6 py-10 xl:justify-end xl:px-16 2xl:px-24'>
         {variant === 'plain' && (
