@@ -48,6 +48,7 @@ export default function AddPostModal({ onClose, refetchOnValidate }: Props) {
           placeholder='Mes conseils pour réduire mon empreinte carbone'
           type='text'
           sizes='xl'
+          variant='dark'
           autoComplete='title'
           required
         />
@@ -55,12 +56,12 @@ export default function AddPostModal({ onClose, refetchOnValidate }: Props) {
       <div className='pb-5'>
         <label
           htmlFor='content'
-          className='block pb-2 text-sm font-medium leading-6 text-gray-900'
+          className='block pb-2 text-sm font-medium leading-6 text-white'
         >
           Contenu du post
         </label>
         <textarea
-          className='block w-full px-2 py-2 text-gray-900 border-0 shadow-sm rounded-xl ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6'
+          className='glassInput sm:text-sm'
           name='content'
           id='content'
           value={text}

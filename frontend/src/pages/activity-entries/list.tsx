@@ -3,7 +3,7 @@ import ListActivities from '@/components/listActivities/ListActivities';
 
 export default function ActivityEntriesList() {
   return (
-    <Layout title='Liste des activités'>
+    <Layout title='Liste des activités' themed>
       <ListActivities />
     </Layout>
   );

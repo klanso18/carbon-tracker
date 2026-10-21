@@ -3,7 +3,7 @@ import Layout from '@/components/layout';
 
 export default function Home() {
   return (
-    <Layout title='Carbon Tracker'>
+    <Layout title='Carbon Tracker' themed>
       <DashboardLayout />
     </Layout>
   );

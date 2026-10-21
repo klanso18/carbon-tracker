@@ -69,10 +69,14 @@ export default function LastPostsWidget({
           />
         ))}
         {!readOnly ? (
-          <div className='flex flex-col justify-center w-[200px] mt-2 dashboardWidget align-center'>
+          <div className='flex flex-col justify-center w-[200px] mt-2 glassCard shadow-2xl p-7 align-center transition-colors hover:bg-white/10'>
             <div className='flex justify-center m-5'>
               <button onClick={toggleModal} className='flex justify-center'>
-                <img src='/icons/cross.png' alt='new-post' />
+                <img
+                  src='/icons/cross.png'
+                  alt='new-post'
+                  className='brightness-0 invert'
+                />
               </button>
             </div>
           </div>

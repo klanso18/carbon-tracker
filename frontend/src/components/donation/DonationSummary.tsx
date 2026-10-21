@@ -45,7 +45,7 @@ export default function DonationSummary({
   if (isPotLoading && isLastDonationsLoading) return null;
 
   return (
-    <section className='mt-4 flex dashboardWidget'>
+    <section className='mt-4 flex glassCard shadow-2xl p-7'>
       <div className='flex flex-col'>
         <Typography variant='subheading' className='font-semibold'>
           Cagnotte Globale
@@ -62,7 +62,9 @@ export default function DonationSummary({
           <div className='flex flex-col'>
             {lastDonations?.getLastDonations.slice(0, 4).map((donation) => (
               <Typography key={donation.id}>
-                <span className='text-green-600 pr-4'>+{donation.amount}€</span>{' '}
+                <span className='text-light_green font-medium pr-4'>
+                  +{donation.amount}€
+                </span>{' '}
                 par {getDonorName(donation)}
               </Typography>
             ))}
@@ -70,7 +72,9 @@ export default function DonationSummary({
           <div className='flex flex-col ml-4'>
             {lastDonations?.getLastDonations.slice(4, 8).map((donation) => (
               <Typography key={donation.id}>
-                <span className='text-green-600 pr-4'>+{donation.amount}€</span>{' '}
+                <span className='text-light_green font-medium pr-4'>
+                  +{donation.amount}€
+                </span>{' '}
                 par {getDonorName(donation)}
               </Typography>
             ))}

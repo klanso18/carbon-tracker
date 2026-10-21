@@ -4,10 +4,10 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
 <body>
   <div>
     <div
-      class="modal-box w-11/12 max-w-5xl absolute z-50 top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      class="modal-box glassPanel w-11/12 max-w-5xl absolute z-50 top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-3xl p-8"
     >
       <p
-        class="font-poppins text-xl font-bold pb-2 text-black"
+        class="font-poppins text-xl font-semibold pb-2 text-white"
       >
         Ajouter une dépense carbone
       </p>
@@ -16,7 +16,7 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
         method="dialog"
       >
         <button
-          class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black hover:bg-[#204660] hover:text-white text-lg font-light"
+          class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-white hover:bg-white/10 text-lg font-light"
           type="button"
         >
           ✕
@@ -25,13 +25,13 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
           class="pb-5"
         >
           <label
-            class="block text-sm font-medium leading-6 text-gray-900 pb-2"
+            class="block text-sm font-medium leading-6 text-white pb-2"
             for="category"
           >
             Catégorie
           </label>
           <select
-            class="select select-bordered block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            class="glassInput sm:text-sm"
             id="category"
             name="category"
             required=""
@@ -50,14 +50,14 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
         >
           <div>
             <label
-              class="block text-sm font-medium leading-6 text-gray-900 pb-2"
+              class="block text-sm font-medium leading-6 pb-2 text-white font-poppins"
               for="name"
             >
               Nom de l'activité
             </label>
             <input
               autocomplete="name"
-              class="block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 py-2.5"
+              class="block w-full rounded-xl px-2 border-0 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6 text-white bg-white/5 ring-white/40 placeholder:text-white/50 font-poppins font-light [color-scheme:dark] focus:ring-2 focus:ring-light_green py-2.5"
               id="name"
               name="name"
               placeholder="Mon trajet en voiture pour me rendre au travail"
@@ -74,14 +74,14 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
           >
             <div>
               <label
-                class="block text-sm font-medium leading-6 text-gray-900 pb-2"
+                class="block text-sm font-medium leading-6 pb-2 text-white font-poppins"
                 for="input"
               >
                 Dépense carbone (en kg/CO2e)
               </label>
               <input
                 autocomplete="input"
-                class="block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 py-2.5"
+                class="block w-full rounded-xl px-2 border-0 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6 text-white bg-white/5 ring-white/40 placeholder:text-white/50 font-poppins font-light [color-scheme:dark] focus:ring-2 focus:ring-light_green py-2.5"
                 id="input"
                 min="0"
                 name="input"
@@ -97,13 +97,13 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
           >
             <div>
               <label
-                class="block text-sm font-medium leading-6 text-gray-900 pb-2"
+                class="block text-sm font-medium leading-6 pb-2 text-white font-poppins"
                 for="spendedAt"
               >
                 Date de la dépense
               </label>
               <input
-                class="block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 py-2.5"
+                class="block w-full rounded-xl px-2 border-0 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6 text-white bg-white/5 ring-white/40 placeholder:text-white/50 font-poppins font-light [color-scheme:dark] focus:ring-2 focus:ring-light_green py-2.5"
                 id="spendedAt"
                 name="spendedAt"
                 required=""
@@ -116,7 +116,7 @@ exports[`AddActivityModal renders the form fields correctly 1`] = `
           class="text-right"
         >
           <button
-            class="rounded-xl bg-medium_green text-sm font-semibold cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out hover:bg-light_green px-4 py-2.5 mt-2"
+            class="text-sm cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out bg-transparent border border-white rounded-[10px] font-poppins font-light hover:bg-white/10 px-4 py-2.5 mt-2"
             data-testid="submit"
             type="submit"
           >

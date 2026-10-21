@@ -23,13 +23,11 @@ export default function DonationForm({
 
   return (
     <div>
-      <div className='dashboardWidget h-[15vh] max-h-[128px] flex justify-between items-center mb-2'>
-        <Typography customClass='text-4xl font-bold text-dark_green max-lg:text-3xl'>
-          Faire un don
-        </Typography>
+      <div className='h-[15vh] max-h-[128px] flex justify-between items-center mb-2 px-7'>
+        <Typography customClass='pageTitle'>Faire un don</Typography>
       </div>
 
-      <section className='dashboardWidget'>
+      <section className='glassCard shadow-2xl p-7 font-light'>
         <Typography className='pt-4 w-2/3'>
           Bienvenue sur la page de dons de Carbon-tracker! Notre application
           innovante vous aide à suivre et réduire votre empreinte carbone au
@@ -39,7 +37,7 @@ export default function DonationForm({
           En contribuant financièrement, vous soutenez un projet essentiel qui
           vise à sensibiliser et à agir contre le changement climatique. Chaque
           don, petit ou grand, permet de développer de nouvelles fonctionnalités
-          et d'atteindre plus d'utilisateurs.
+          et d&apos;atteindre plus d&apos;utilisateurs.
         </Typography>
         <Typography className='pt-4 w-2/3'>
           Ensemble, faisons un pas de plus vers un avenir durable!
@@ -56,14 +54,21 @@ export default function DonationForm({
             value={amount ?? ''}
             onChange={handleAmountChange}
             required
+            variant='dark'
           />
         </div>
         <InputCheckbox
           id='anonymous-donation'
           label='Rendre mon don anonyme'
           className='pt-4'
+          variant='dark'
         />
-        <Button className='mt-4' onClick={handleButtonClick}>
+        <Button
+          variant='outline'
+          size='xl'
+          className='mt-4'
+          onClick={handleButtonClick}
+        >
           Soumettre mon don
         </Button>
       </section>

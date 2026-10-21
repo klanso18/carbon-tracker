@@ -42,19 +42,21 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className='flex h-full text-black max-[960px]:flex-col'>
+    <div className='flex h-full text-white max-[960px]:flex-col'>
       <div className='w-7/12 h-full min-h-fit max-[960px]:w-full'>
         <div className='h-[44%] p-3 max-[960px]: min-h-fit'>
-          <div className='h-full dashboardWidget min-h-fit'>
+          <div className='h-full glassCard shadow-2xl p-7 min-h-fit'>
             <div className='flex items-center justify-between'>
               <h1 className='text-xl poppins-bold'>
                 Bienvenue{' '}
-                <span className='text-sm poppins-regular'>
+                <span className='text-sm poppins-light text-white/70'>
                   Répartition d&apos;émissons par catégories
                 </span>
               </h1>
               {userHasName ? (
-                <Button onClick={copyToClipboard}>Partager mon profil</Button>
+                <Button variant='outline' onClick={copyToClipboard}>
+                  Partager mon profil
+                </Button>
               ) : null}
             </div>
 
@@ -65,7 +67,7 @@ export default function DashboardLayout() {
           </div>
         </div>
         <div className='h-[28%]  p-3'>
-          <div className='h-full dashboardWidget'>
+          <div className='h-full glassCard shadow-2xl p-7'>
             <div className='text-xl poppins-bold'>Dépenses annuelles</div>
             <ByMonthChart
               dataByMonth={sumsByMonth?.getSumByMonth ?? []}

@@ -24,7 +24,18 @@ export default function ByMonthChart({ dataByMonth, loading }: Props) {
       },
     ],
   };
+  // Light axes for the dark themed background (scoped here, not on chart.js global defaults)
   const options = {
+    scales: {
+      x: {
+        ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+      },
+      y: {
+        ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+      },
+    },
     plugins: {
       tooltip: {
         displayColors: false,

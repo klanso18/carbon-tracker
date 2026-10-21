@@ -205,7 +205,8 @@ export default function ListActivities() {
     <div className='flex  h-full text-black '>
       <div className=' w-full flex flex-col p-10 pb-0 max-[1710px]:p-2'>
         <HeaderTotals totalEmissions={totalCo2Sum} />
-        <div className='flex items-center justify-between bg-white border-b-2 p-5 shadow-xl rounded-t-xl'>
+        {/* backdrop-blur creates a stacking context: lift the toolbar so its dropdowns render above the list */}
+        <div className='glassCard shadow-2xl flex items-center justify-between p-5 relative z-10'>
           <div className='flex items-center'>
             <div className=''>
               <InputCheckbox
@@ -225,6 +226,7 @@ export default function ListActivities() {
                     ? setSelectedEntries([])
                     : setSelectedEntries(activityEntries ?? [])
                 }
+                variant='dark'
               />
             </div>
             <div
@@ -235,7 +237,12 @@ export default function ListActivities() {
                 selectedEntries.length !== 0 && setShowActionModal(true)
               }
             >
-              <img src='/vertical-dots.svg' width={6} height={4} />
+              <img
+                src='/vertical-dots.svg'
+                width={6}
+                height={4}
+                className='invert'
+              />
               <ActivityEntryActionsModal
                 actions={modalActions}
                 isOpened={showActionModal}
@@ -245,8 +252,9 @@ export default function ListActivities() {
             </div>
             <div className='ml-10 max-[970px]:ml-2 mr-2'>
               <Button
+                variant='outline'
                 size='lg'
-                className='text-lg bg-medium_blue hover:bg-light_blue flex items-center '
+                className='text-lg flex items-center'
                 onClick={() => setShowModalCreate(true)}
               >
                 <img src={'/plus-icon.svg'} width={20} height={20} />{' '}
@@ -266,12 +274,14 @@ export default function ListActivities() {
                 value={searchedTerm}
                 onChange={(e) => setSearchedTerm(e.target.value)}
                 showLabel={false}
+                variant='dark'
               />
             </div>
             <div className='ml-5 relative'>
               <Button
+                variant='outline'
                 size='lg'
-                className='text-lg bg-medium_blue hover:bg-light_blue flex items-center '
+                className='text-lg flex items-center'
                 onClick={() => setShowFilterModal((s) => !s)}
               >
                 <img src={'/filter-icon.svg'} width={20} height={20} />
@@ -307,7 +317,7 @@ export default function ListActivities() {
           />
         )}
 
-        <div className='overflow-auto h-max shadow-xl bg-light_grey'>
+        <div className='glassCard shadow-2xl overflow-auto h-max mt-3 p-2'>
           {activityEntries?.length !== 0 ? (
             activityEntries?.map((activity) => (
               <ActivityEntry
@@ -325,14 +335,16 @@ export default function ListActivities() {
             ))
           ) : (
             <div className='w-full min-h-[500px] flex justify-center mt-10 '>
-              <Typography customClass='text-md  font-bold text-medium_green '>
+              <Typography customClass='text-md font-light text-light_green'>
                 Aucune activité ne correspond à vos filtres et recherche
               </Typography>
             </div>
           )}
           {!hideLoadMoreButton && (
             <div className='m-2 flex justify-center'>
-              <Button onClick={() => handleLoadMore()}>voir plus</Button>
+              <Button variant='outline' onClick={() => handleLoadMore()}>
+                voir plus
+              </Button>
             </div>
           )}
         </div>

@@ -38,11 +38,11 @@ const CreateNewPost = ({ handleRefetch }: Props) => {
 
   return (
     <form onSubmit={handleSubmit} className='w-full mx-auto'>
-      <div className='bg-gray-100 shadow-md rounded-lg p-6'>
+      <div className='glassCard shadow-2xl p-6'>
         <div className='flex flex-col gap-4'>
           <div className='flex flex-row justify-between'>
             <div className='flex flex-col items-center mx-8'>
-              <div className='w-32 h-32 overflow-hidden rounded-full'>
+              <div className='w-32 h-32 overflow-hidden rounded-full ring-2 ring-white/40'>
                 <img
                   src={
                     user?.picture != null ? user.picture : '/icons/avatar.svg'
@@ -52,7 +52,7 @@ const CreateNewPost = ({ handleRefetch }: Props) => {
                 />
               </div>
               <div className='flex flex-col'>
-                <h4 className='text-lg font-bold'>
+                <h4 className='mt-2 text-lg font-semibold'>
                   {user?.name || 'Anonymous'}
                 </h4>
               </div>
@@ -66,7 +66,7 @@ const CreateNewPost = ({ handleRefetch }: Props) => {
                   placeholder='Quoi de neuf ?'
                   value={title}
                   onChange={handleTitleChange}
-                  className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
+                  className='glassInput'
                   required
                 />
               </div>
@@ -76,7 +76,7 @@ const CreateNewPost = ({ handleRefetch }: Props) => {
                   value={content}
                   placeholder='Postez ici vos bons plans...'
                   onChange={handleContentChange}
-                  className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
+                  className='glassInput'
                   rows={4}
                   required
                 />
@@ -85,6 +85,7 @@ const CreateNewPost = ({ handleRefetch }: Props) => {
                 <Button
                   className='mt-2'
                   size='xl'
+                  variant='outline'
                   type='submit'
                   data-testid='submit'
                 >

@@ -51,12 +51,12 @@ export default function UpdateActivityModal({ entryData, onClose }: Props) {
       <div className='pb-5'>
         <label
           htmlFor='category'
-          className='block text-sm font-medium leading-6 text-gray-900 pb-2'
+          className='block text-sm font-medium leading-6 text-white pb-2'
         >
           Catégorie
         </label>
         <select
-          className='select select-bordered block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6'
+          className='glassInput sm:text-sm'
           id='category'
           name='category'
           required
@@ -80,6 +80,7 @@ export default function UpdateActivityModal({ entryData, onClose }: Props) {
           placeholder='Mon trajet en voiture pour me rendre au travail'
           type='text'
           sizes='xl'
+          variant='dark'
           autoComplete='name'
           required
         />
@@ -95,6 +96,7 @@ export default function UpdateActivityModal({ entryData, onClose }: Props) {
             step={0.01}
             type='number'
             sizes='xl'
+            variant='dark'
             autoComplete='input'
             required
           />
@@ -106,6 +108,7 @@ export default function UpdateActivityModal({ entryData, onClose }: Props) {
             label='Date de la dépense'
             type='date'
             sizes='xl'
+            variant='dark'
           />
         </div>
       </div>
