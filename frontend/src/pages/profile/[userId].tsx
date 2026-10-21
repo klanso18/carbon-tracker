@@ -39,7 +39,7 @@ const ProfileStats = ({ userId }: { userId: string }) => {
   return (
     <div className='w-full h-full'>
       <div className='w-full h-[35%] p-3 flex gap-4 items-center'>
-        <div className='w-3/4 h-full dashboardWidget'>
+        <div className='w-3/4 h-full glassCard shadow-2xl p-7'>
           <h1 className='text-xl poppins-bold'>
             Répartition des émissons de CO2 par catégories
           </h1>
@@ -49,17 +49,17 @@ const ProfileStats = ({ userId }: { userId: string }) => {
             loading={loadingByCategory}
           />
         </div>
-        <div className='flex flex-col items-center justify-center w-1/4 h-full dashboardWidget'>
+        <div className='flex flex-col items-center justify-center w-1/4 h-full glassCard shadow-2xl p-7'>
           <div className='flex items-end'>
             <Typography customClass='text-4xl lg:text-3xl xl:text-5xl font-bold mr-1 text-medium_orange'>
               {totalCO2}
             </Typography>
-            <Typography customClass='text-lg lg:text-xl xl:text-3xl font-bold text-dark_green'>
+            <Typography customClass='text-lg lg:text-xl xl:text-3xl font-semibold text-white'>
               kgCO2
             </Typography>
           </div>
           <div>
-            <Typography customClass='text-md  font-bold text-medium_green'>
+            <Typography customClass='text-md font-light text-light_green text-center'>
               {percentOfRecommendedEmissions} % du total annuel recommandé
             </Typography>
           </div>
@@ -67,7 +67,7 @@ const ProfileStats = ({ userId }: { userId: string }) => {
       </div>
 
       <div className='h-[28%]  p-3'>
-        <div className='h-full dashboardWidget'>
+        <div className='h-full glassCard shadow-2xl p-7'>
           <div className='text-xl poppins-bold'>Dépenses annuelles</div>
           <ByMonthChart
             dataByMonth={sumsByMonth?.getSumByMonth ?? []}
@@ -76,13 +76,11 @@ const ProfileStats = ({ userId }: { userId: string }) => {
         </div>
       </div>
       <div className='h-[28%]  p-3'>
-        {
-          <LastPostWidget
-            posts={data?.getUserPosts ?? []}
-            handleRefetchPosts={handleRefetchPosts}
-            readOnly
-          />
-        }
+        <LastPostWidget
+          posts={data?.getUserPosts ?? []}
+          handleRefetchPosts={handleRefetchPosts}
+          readOnly
+        />
       </div>
     </div>
   );
@@ -102,9 +100,13 @@ export default function Profile() {
   });
 
   return (
-    <Layout title='Liste des activités'>
-      <p className='p-4 text-2xl font-bold'>Profil de {data?.userById?.name}</p>
-      <div className='flex h-screen text-black'>
+    <Layout title='Liste des activités' themed>
+      <div className='h-[15vh] max-h-[128px] flex items-center px-7'>
+        <Typography customClass='pageTitle'>
+          Profil de {data?.userById?.name}
+        </Typography>
+      </div>
+      <div className='flex h-screen'>
         {!loading && data?.userById && (
           <ProfileStats userId={data.userById?.id} />
         )}

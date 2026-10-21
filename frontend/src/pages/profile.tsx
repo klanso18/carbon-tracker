@@ -124,21 +124,19 @@ export default function Profile() {
   };
 
   return (
-    <Layout title='Profile'>
+    <Layout title='Profile' themed>
       <div className='w-full flex flex-col p-10 pb-0 max-[1710px]:p-2'>
-        <div className='dashboardWidget h-[15vh] max-h-[128px] flex justify-between items-center mb-2'>
-          <Typography customClass='text-4xl font-bold text-dark_green max-lg:text-3xl'>
-            Mon profil
-          </Typography>
+        <div className='h-[15vh] max-h-[128px] flex justify-between items-center mb-2 px-7'>
+          <Typography customClass='pageTitle'>Mon profil</Typography>
         </div>
         <div className='flex flex-row'>
-          <div className='dashboardWidget w-full'>
+          <div className='glassCard shadow-2xl p-7 w-full'>
             <div className='flex justify-center'>
               <div className='relative inline-block'>
                 <img
                   src={imageSrc}
                   alt='profile picture'
-                  className='object-cover w-40 h-40 rounded-full mb-5'
+                  className='object-cover w-40 h-40 rounded-full mb-5 ring-2 ring-white/40'
                 />
                 <input
                   type='file'
@@ -148,7 +146,7 @@ export default function Profile() {
                 />
                 <label
                   htmlFor='file-input'
-                  className='absolute bottom-0 right-0 bg-lime-700 rounded-full p-2 cursor-pointer shadow-md hover:bg-black'
+                  className='absolute bottom-0 right-0 bg-medium_green rounded-full p-2 cursor-pointer shadow-md transition-colors duration-300 hover:bg-light_green'
                 >
                   <img
                     src='/icons/modify.png'
@@ -162,36 +160,46 @@ export default function Profile() {
             <div className='text-center flex flex-col items-center'>
               {user?.name ? (
                 <>
-                  <p className='mt-3 font-poppins text-xl font-bold pb-2 text-black'>
+                  <p className='mt-3 font-poppins text-xl font-semibold pb-2 text-white'>
                     {user.name}
                   </p>
                   <Button
+                    variant='outline'
+                    size='lg'
                     onClick={() => setIsModalOpen(true)}
-                    className='mt-2 bg-lime-700 w-1/3'
+                    className='mt-2 w-1/3'
                   >
                     Modifier le nom
                   </Button>
                 </>
               ) : (
                 <>
-                  <p>Veuillez saisir votre Nom</p>
+                  <p className='font-poppins font-light'>
+                    Veuillez saisir votre Nom
+                  </p>
                   <Button
+                    variant='outline'
+                    size='lg'
                     onClick={() => setIsModalOpen(true)}
-                    className='mt-2 bg-blue-500 w-1/3'
+                    className='mt-2 w-1/3'
                   >
                     Ajouter un nom
                   </Button>
                 </>
               )}
               <Button
+                variant='outline'
+                size='lg'
                 onClick={() => setIsPasswordModalOpen(true)}
-                className='mt-2 bg-lime-700 w-1/3'
+                className='mt-2 w-1/3'
               >
                 Modifier mon mot de passe
               </Button>
               <Button
+                variant='outline'
+                size='lg'
                 onClick={() => setIsDeleteModalOpen(true)}
-                className='mt-2 bg-red-600 w-1/3'
+                className='mt-2 w-1/3 !border-red-400 !text-red-300 hover:!bg-red-500/10'
               >
                 Supprimer mon compte
               </Button>
@@ -210,7 +218,7 @@ export default function Profile() {
             type='text'
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            className='glassInput'
           />
         </GenericFormModal>
       )}
@@ -223,7 +231,7 @@ export default function Profile() {
         >
           <label
             htmlFor='oldPassword'
-            className='text-sm font-medium text-gray-700'
+            className='block pb-2 text-sm font-medium text-white'
           >
             Ancien mot de passe
           </label>
@@ -232,11 +240,11 @@ export default function Profile() {
             id='oldPassword'
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
-            className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            className='glassInput'
           />
           <label
             htmlFor='newPassword'
-            className='text-sm font-medium text-gray-700 mt-4'
+            className='block pb-2 text-sm font-medium text-white mt-4'
           >
             Nouveau mot de passe
           </label>
@@ -245,9 +253,9 @@ export default function Profile() {
             id='newPassword'
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            className='glassInput'
           />
-          {error && <p className='mt-2 text-red-500'>{error}</p>}
+          {error && <p className='mt-2 text-red-300'>{error}</p>}
         </GenericFormModal>
       )}
       {isPasswordModalOpen && <div className='overlay'></div>}
@@ -259,7 +267,7 @@ export default function Profile() {
         >
           <label
             htmlFor='deletePassword'
-            className='text-sm font-medium text-gray-700'
+            className='block pb-2 text-sm font-medium text-white'
           >
             Mot de passe
           </label>
@@ -268,9 +276,9 @@ export default function Profile() {
             id='deletePassword'
             value={deletePassword}
             onChange={(e) => setDeletePassword(e.target.value)}
-            className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            className='glassInput'
           />
-          {error && <p className='mt-2 text-red-500'>{error}</p>}
+          {error && <p className='mt-2 text-red-300'>{error}</p>}
         </GenericFormModal>
       )}
       {isDeleteModalOpen && <div className='overlay'></div>}

@@ -35,7 +35,7 @@ export default function ActiveFiltersBar({
   }
 
   return (
-    <div className='flex items-center justify-between bg-white p-5 shadow-xl mb-2'>
+    <div className='glassCard shadow-2xl flex items-center justify-between p-5 mt-3'>
       <div className='flex flex-wrap'>
         {selectedCategoriesFilter.map((cat) => (
           <ActiveFilterBagde
@@ -55,7 +55,8 @@ export default function ActiveFiltersBar({
       <div>
         <Button
           size='lg'
-          className='text-lg bg-medium_blue hover:bg-light_blue flex items-center'
+          variant='outline'
+          className='text-lg flex items-center'
           onClick={onClearFilters}
         >
           <img src={'/trash-icon.svg'} />

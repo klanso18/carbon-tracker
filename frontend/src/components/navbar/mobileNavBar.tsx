@@ -89,8 +89,15 @@ const NavLinks = () => {
           ref={navRef}
           className='absolute top-0 left-0 w-full bg-black z-30'
         >
-          <div className='logo-mobile w-52 absolute top-1.5 p-5'>
-            <img src='/icons/mobile-logo.png' alt='Mobile Logo' />
+          <div className='logo-mobile absolute top-1.5 p-5 flex items-center gap-3'>
+            <img
+              src='/logo-ct.png'
+              alt='Logo Carbon Tracker'
+              className='h-10 w-auto'
+            />
+            <span className='font-aclonica text-xl text-white'>
+              Carbon Tracker
+            </span>
           </div>
           <div className='flex flex-col items-start w-full p-5 mt-12 text-white'>
             <Links />

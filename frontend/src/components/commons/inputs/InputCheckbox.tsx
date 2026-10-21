@@ -8,6 +8,7 @@ interface InputCheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string;
   labelClassName?: string;
   partiallyChecked?: boolean;
+  variant?: 'light' | 'dark';
 }
 
 export default function InputCheckbox({
@@ -17,8 +18,10 @@ export default function InputCheckbox({
   inputClassName,
   labelClassName,
   partiallyChecked = false,
+  variant = 'light',
   ...props
 }: InputCheckboxProps) {
+  const isDark = variant === 'dark';
   const defaultClasses = 'relative flex items-start';
   const inputClasses = 'flex h-6 items-center';
   const labelClasses = 'ml-3 text-sm leading-6';
@@ -41,7 +44,10 @@ export default function InputCheckbox({
           name={id}
           type='checkbox'
           className={clsx(
-            'h-4 w-4 rounded cursor-pointer border-gray-300 text-indigo-600 focus:ring-indigo-600',
+            'h-4 w-4 rounded cursor-pointer',
+            isDark
+              ? 'bg-transparent border-white/50 text-medium_green focus:ring-medium_green'
+              : 'border-gray-300 text-indigo-600 focus:ring-indigo-600',
             inputClassName,
           )}
           {...props}
@@ -50,7 +56,12 @@ export default function InputCheckbox({
       <div className={labelClasses}>
         <label
           htmlFor={id}
-          className={clsx('font-normal text-gray-900', labelClassName)}
+          className={clsx(
+            isDark
+              ? 'font-poppins font-light text-white'
+              : 'font-normal text-gray-900',
+            labelClassName,
+          )}
         >
           {label}
         </label>

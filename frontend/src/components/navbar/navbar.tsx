@@ -62,11 +62,15 @@ export default function navbar() {
   return (
     <>
       <div className='flex items-center justify-center h-screen ml-5 mr-5'>
-        <div className='flex flex-col h-[98vh] min-h-fit bg-black text-white w-28 rounded-3xl items-center'>
-          <div className='cirlce flex items-center justify-center mt-5 bg-white w-full'>
+        <div className='flex flex-col h-[98vh] min-h-fit bg-black text-white w-28 rounded-3xl items-center border border-white/20 shadow-[0_0_25px_rgba(171,207,174,0.15)]'>
+          <div className='flex items-center justify-center mt-5 w-full'>
             <div className='w-[60%] p-2'>
               <Link href='/home'>
-                <img src='/icons/logo.png' alt='Logo' className='w-full' />
+                <img
+                  src='/logo-ct.png'
+                  alt='Logo Carbon Tracker'
+                  className='w-full'
+                />
               </Link>
             </div>
           </div>

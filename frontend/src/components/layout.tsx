@@ -1,5 +1,7 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { ReactNode } from 'react';
+import clsx from 'clsx';
 import { useMediaQuery } from 'react-responsive';
 import Navbar from './navbar/navbar';
 import MobileNavBar from './navbar/mobileNavBar';
@@ -7,9 +9,15 @@ import MobileNavBar from './navbar/mobileNavBar';
 type LayoutProps = {
   children: ReactNode;
   title: string;
+  // Opt-in carbon-tracker background, enabled page by page during the redesign
+  themed?: boolean;
 };
 
-export default function layout({ children, title }: LayoutProps) {
+export default function layout({
+  children,
+  title,
+  themed = false,
+}: LayoutProps) {
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   return (
     <>
@@ -19,23 +27,42 @@ export default function layout({ children, title }: LayoutProps) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      {isDesktop ? (
-        <div className='flex h-screen'>
-          <Navbar />
-          <main className='main-content flex-1 overflow-y-auto'>
-            {children}
-          </main>
-        </div>
-      ) : (
-        <>
-          <MobileNavBar />
-          <div className='flex h-full'>
+      <div
+        className={clsx(
+          themed && 'relative isolate min-h-screen bg-dark_green text-white',
+        )}
+      >
+        {themed && (
+          <div className='fixed inset-0 -z-10'>
+            <Image
+              src='/carbon-tracker-bg.jpg'
+              alt=''
+              fill
+              sizes='100vw'
+              className='object-cover'
+              priority
+            />
+            <div className='absolute inset-0 bg-gradient-to-r from-dark_green/70 via-dark_green/85 to-dark_green' />
+          </div>
+        )}
+        {isDesktop ? (
+          <div className='flex h-screen'>
+            <Navbar />
             <main className='main-content flex-1 overflow-y-auto'>
               {children}
             </main>
           </div>
-        </>
-      )}
+        ) : (
+          <>
+            <MobileNavBar />
+            <div className='flex h-full'>
+              <main className='main-content flex-1 overflow-y-auto'>
+                {children}
+              </main>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 }

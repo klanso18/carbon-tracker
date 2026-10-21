@@ -5,12 +5,10 @@ import PostGlobalContainer from '@/components/posts/PostGlobalContainer';
 function App() {
   return (
     <div>
-      <Layout title='Bons plans'>
+      <Layout title='Bons plans' themed>
         <div className='w-full flex flex-col p-10 pb-0 max-[1710px]:p-2'>
-          <div className='dashboardWidget h-[15vh] max-h-[128px] flex justify-between items-center mb-2'>
-            <Typography customClass='text-4xl font-bold text-dark_green max-lg:text-3xl'>
-              Mes bons blans
-            </Typography>
+          <div className='h-[15vh] max-h-[128px] flex justify-between items-center mb-2 px-7'>
+            <Typography customClass='pageTitle'>Mes bons plans</Typography>
           </div>
           <PostGlobalContainer />
         </div>

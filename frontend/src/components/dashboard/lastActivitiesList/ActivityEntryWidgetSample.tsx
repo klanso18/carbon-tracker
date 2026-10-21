@@ -8,7 +8,7 @@ type Props = {
 
 export default function ActivityEntryWidgetSample({ entryData }: Props) {
   return (
-    <div className='flex justify-between p-2 border border-b-black mb-4'>
+    <div className='flex justify-between p-2 pb-4 border-b border-white/10 last:border-b-0 mb-4'>
       <div className='min-w-[50px] mr-5 flex'>
         <img
           alt={entryData.category.name}
@@ -19,24 +19,24 @@ export default function ActivityEntryWidgetSample({ entryData }: Props) {
       </div>
       <div className='flex flex-col grow items-left '>
         <div>
-          <Typography className='poppins-bold text-dark_green text-left'>
+          <Typography className='poppins-semiBold text-white text-left'>
             {entryData?.name}
           </Typography>
         </div>
         <div>
-          <Typography className='text-xs text-dark_green text-left'>
+          <Typography className='text-xs font-light text-white/70 text-left'>
             {getDateFormated(entryData.spendedAt)}
           </Typography>
         </div>
       </div>
       <div className='flex flex-col text-right min-w-[100px]'>
         <div>
-          <Typography className='text-medium_blue poppins-bold text-lg'>
+          <Typography className='text-light_green poppins-bold text-lg'>
             {entryData?.input} Kg
           </Typography>
         </div>
         <div>
-          <Typography className='text-medium_blue'>CO2</Typography>
+          <Typography className='text-white/70'>CO2</Typography>
         </div>
       </div>
     </div>

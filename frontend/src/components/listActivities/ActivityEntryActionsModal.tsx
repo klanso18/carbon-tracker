@@ -30,7 +30,7 @@ export default function ActivityEntryActionsModal({
         <div
           ref={ref}
           onClick={(e) => e.stopPropagation()}
-          className={`bg-very_light_grey shadow-xl z-10 rounded-xl`}
+          className='glassPanel z-10 rounded-2xl overflow-hidden'
           style={
             alignment === 'left'
               ? { left: '0%', position: 'absolute' }
@@ -44,7 +44,7 @@ export default function ActivityEntryActionsModal({
                 action();
                 onClose();
               }}
-              className='flex items-center justify-start py-2 px-5 poppins-semiBold w-[130px] hover:bg-white rounded-xl'
+              className='flex items-center justify-start py-2 px-5 poppins-semiBold w-[130px] cursor-pointer transition-colors hover:bg-white/10'
             >
               {label}
             </div>

@@ -4,6 +4,7 @@ import clsx from 'clsx';
 interface InputLabelProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   sizes?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'light' | 'dark';
   className?: string;
   labelClassName?: string;
   showLabel?: boolean;
@@ -12,6 +13,7 @@ interface InputLabelProps extends InputHTMLAttributes<HTMLInputElement> {
 export default function InputLabel({
   label,
   sizes = 'md',
+  variant = 'light',
   className,
   labelClassName,
   disabled,
@@ -19,7 +21,16 @@ export default function InputLabel({
   ...props
 }: InputLabelProps) {
   const baseClasses =
-    'block w-full rounded-xl px-2 border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6';
+    'block w-full rounded-xl px-2 border-0 shadow-sm ring-1 ring-inset sm:text-sm sm:leading-6';
+
+  // dark: for the carbon-tracker themed background (color-scheme darkens native date pickers)
+  const variantClasses =
+    variant === 'dark'
+      ? 'text-white bg-white/5 ring-white/40 placeholder:text-white/50 font-poppins font-light [color-scheme:dark] focus:ring-2 focus:ring-light_green'
+      : 'text-gray-900 ring-gray-300 placeholder:text-gray-400';
+
+  const labelVariantClasses =
+    variant === 'dark' ? 'text-white font-poppins' : 'text-gray-900';
 
   let sizeClasses = '';
 
@@ -46,7 +57,8 @@ export default function InputLabel({
         <label
           htmlFor={props.id}
           className={clsx(
-            'block text-sm font-medium leading-6 text-gray-900 pb-2',
+            'block text-sm font-medium leading-6 pb-2',
+            labelVariantClasses,
             labelClassName,
           )}
         >
@@ -54,7 +66,10 @@ export default function InputLabel({
         </label>
       )}
 
-      <input className={clsx(baseClasses, sizeClasses, className)} {...props} />
+      <input
+        className={clsx(baseClasses, variantClasses, sizeClasses, className)}
+        {...props}
+      />
     </div>
   );
 }

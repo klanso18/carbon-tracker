@@ -4,16 +4,23 @@ import clsx from 'clsx';
 interface GenericButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'primary' | 'outline';
 }
 
 export default function Button({
   size = 'md',
+  variant = 'primary',
   className,
   children,
   ...props
 }: GenericButtonProps) {
   const baseClasses =
-    'rounded-xl bg-medium_green text-sm font-semibold cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out hover:bg-light_green';
+    'text-sm cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out';
+
+  const variantClasses =
+    variant === 'outline'
+      ? 'bg-transparent border border-white rounded-[10px] font-poppins font-light hover:bg-white/10'
+      : 'rounded-xl bg-medium_green font-semibold hover:bg-light_green';
 
   let sizeClasses = '';
 
@@ -40,7 +47,7 @@ export default function Button({
   return (
     <button
       type='button'
-      className={clsx(baseClasses, sizeClasses, className)}
+      className={clsx(baseClasses, variantClasses, sizeClasses, className)}
       {...props}
     >
       {children}

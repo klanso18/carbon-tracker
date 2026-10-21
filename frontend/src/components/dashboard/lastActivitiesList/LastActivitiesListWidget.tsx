@@ -18,25 +18,29 @@ export default function LastActivitiesListWidget({ handleRefetch }: Props) {
     setIsModalOpen(!isModalOpen);
   };
 
+  // The modal stays outside the glass card: backdrop-filter would otherwise
+  // become the containing block of the fixed overlay and trap the modal inside the card
   return (
-    <div className='dashboardWidget flex flex-col  h-full'>
-      <div className='mb-6 flex justify-between align-center'>
-        <Typography variant='heading'>Dernières dépenses</Typography>
-        <button onClick={toggleModal}>
-          <img src='/button-plus.svg' alt='add an activity entry' />
-        </button>
-      </div>
-      {loading ? (
-        'Chargement'
-      ) : (
-        <div className='flex flex-col overflow-auto'>
-          {(data?.filteredActivityEntries ?? []).map((entry) => {
-            return (
-              <ActivityEntryWidgetSample key={entry.id} entryData={entry} />
-            );
-          })}
+    <>
+      <div className='glassCard shadow-2xl p-7 flex flex-col h-full'>
+        <div className='mb-6 flex justify-between align-center'>
+          <Typography variant='heading'>Dernières dépenses</Typography>
+          <button onClick={toggleModal}>
+            <img src='/button-plus.svg' alt='add an activity entry' />
+          </button>
         </div>
-      )}
+        {loading ? (
+          'Chargement'
+        ) : (
+          <div className='flex flex-col overflow-auto'>
+            {(data?.filteredActivityEntries ?? []).map((entry) => {
+              return (
+                <ActivityEntryWidgetSample key={entry.id} entryData={entry} />
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {isModalOpen && (
         <AddActivityModal
@@ -48,6 +52,6 @@ export default function LastActivitiesListWidget({ handleRefetch }: Props) {
         />
       )}
       {isModalOpen && <div className='overlay'></div>}
-    </div>
+    </>
   );
 }

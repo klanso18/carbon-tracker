@@ -73,7 +73,7 @@ export default function CategoryChart({ dataByCategory, loading }: Props) {
                       alt={cat.categoryName}
                     />
                   </div>
-                  <div className='text-medium_blue poppins-semiBold text-lg text-nowrap max-[1220px]:text-sm'>
+                  <div className='text-white poppins-semiBold text-lg text-nowrap max-[1220px]:text-sm'>
                     {cat.sumKgCO2} <span>kgCO2</span>
                   </div>
                 </div>

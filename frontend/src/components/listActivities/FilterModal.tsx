@@ -41,7 +41,7 @@ export default function FilterModal({
         <div
           ref={ref}
           onClick={(e) => e.stopPropagation()}
-          className={` bg-very_light_grey shadow-xl z-10 rounded-xl p-7 min-w-[250px]`}
+          className='glassPanel z-10 rounded-2xl p-7 min-w-[250px]'
           style={
             alignment === 'left'
               ? { left: '0%', position: 'absolute', top: '110%' }
@@ -61,6 +61,7 @@ export default function FilterModal({
                     (selectedCat) => selectedCat.id === cat.id,
                   )}
                   onChange={() => toggleCatSelection(cat)}
+                  variant='dark'
                   key={cat.id}
                 />
               );
@@ -75,6 +76,7 @@ export default function FilterModal({
                 id='from'
                 label='Du'
                 type='date'
+                variant='dark'
                 value={selectedDate.from ?? ''}
                 onChange={(e) =>
                   setDateFilter({ ...selectedDate, from: e.target.value })
@@ -84,6 +86,7 @@ export default function FilterModal({
                 id='to'
                 label='Au'
                 type='date'
+                variant='dark'
                 value={selectedDate.to ?? ''}
                 onChange={(e) =>
                   setDateFilter({ ...selectedDate, to: e.target.value })
