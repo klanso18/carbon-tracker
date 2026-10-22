@@ -24,8 +24,9 @@ const LastPostItem: React.FC<LastPostItemProps> = ({
     lineClampClass = 'line-clamp-3';
   }
   return (
-    <div className='flex flex-col w-1/3 mt-2 mr-5 glassCard shadow-2xl p-7'>
-      <div className='flex flex-col justify-between align-center'>
+    // No card per post: the widget is already a glass card, posts are only separated by a divider
+    <div className='flex flex-col flex-1 min-w-0 overflow-hidden px-5 first:pl-0 last:pr-0 border-l border-white/10 first:border-l-0'>
+      <div className='flex flex-col'>
         <div className='flex flex-row items-center border-b border-white/20 pb-1'>
           <div className='flex-shrink-0 w-12 h-12 mb-1 rounded-full overflow-hidden ring-2 ring-white/40'>
             <img

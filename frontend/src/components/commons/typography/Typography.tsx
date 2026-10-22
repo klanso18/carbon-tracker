@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import clsx from 'clsx';
 
 interface TypographyProps {
+  // Rendered HTML tag: lets a heading variant be a real <h1>/<h2> for accessibility
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
   variant?: 'heading' | 'subheading' | 'paragraph';
   customClass?: string;
   className?: string;
@@ -9,6 +11,7 @@ interface TypographyProps {
 }
 
 export default function Typography({
+  as: Component = 'p',
   variant = 'paragraph',
   customClass,
   className,
@@ -34,5 +37,9 @@ export default function Typography({
 
   const textSize = customClass || variantClasses;
 
-  return <p className={clsx(baseClasses, textSize, className)}>{children}</p>;
+  return (
+    <Component className={clsx(baseClasses, textSize, className)}>
+      {children}
+    </Component>
+  );
 }
