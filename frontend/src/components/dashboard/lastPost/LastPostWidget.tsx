@@ -68,6 +68,11 @@ export default function LastPostsWidget({
           ) : null}
         </div>
         <div className='flex flex-row flex-1 min-h-0'>
+          {lastPosts.length === 0 ? (
+            <Typography className='self-center text-white/70'>
+              Aucun post pour le moment
+            </Typography>
+          ) : null}
           {lastPosts.map((post) => (
             <LastPostItem
               key={post.id}
