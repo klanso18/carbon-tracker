@@ -1,12 +1,14 @@
 import {
-  useGetAllPostsQuery,
   useGetSumByCategoryQuery,
   useGetSumByMonthQuery,
 } from '@/graphql/generated/schema';
 import ByMonthChart from './dataViz/ByMonthChart';
 import CategoryChart from './dataViz/CategoryChart';
 import LastActivitiesListWidget from './lastActivitiesList/LastActivitiesListWidget';
-import LastPostWidget from './lastPost/LastPostWidget';
+import DashboardCard from './DashboardCard';
+import EquivalencesWidget from './equivalences/EquivalencesWidget';
+import CarbonGoalWidget from './carbonGoal/CarbonGoalWidget';
+import TipsWidget from './tips/TipsWidget';
 import Button from '../commons/buttons/Button';
 import Typography from '../commons/typography/Typography';
 import { useUser } from '@/contexts/UserContext';
@@ -30,8 +32,6 @@ export default function DashboardLayout() {
   refetchTotalsByMonth();
   refetchTotalsByCategories();
 
-  const { data, refetch: handleRefetchPosts } = useGetAllPostsQuery();
-
   const userHasName = user?.name != null;
 
   const copyToClipboard = () => {
@@ -42,55 +42,55 @@ export default function DashboardLayout() {
     showAlert('Copier dans le presse-papier !', 'success');
   };
 
+  // Desktop: named grid areas place the widgets (charts in the wide left column,
+  // equivalences and goal side by side below them). Mobile: one column in DOM order.
+  // Height is only locked to the viewport on desktop: between 768px and 960px the layout
+  // shell is already h-screen, and a viewport-high stacked column made the widgets overlap.
   return (
-    <div className='flex h-full text-white max-[960px]:flex-col'>
-      <div className='w-7/12 h-full min-h-fit max-[960px]:w-full'>
-        <div className='h-[44%] p-3 max-[960px]: min-h-fit'>
-          <div className='h-full glassCard shadow-2xl p-7 min-h-fit flex flex-col'>
-            <div className='mb-4 flex items-center justify-between'>
-              <Typography as='h1' variant='heading'>
-                Bienvenue{' '}
-                <span className='text-sm font-light text-white/70'>
-                  Répartition d&apos;émissions par catégories
-                </span>
-              </Typography>
-              {userHasName ? (
-                <Button variant='outline' onClick={copyToClipboard}>
-                  Partager mon profil
-                </Button>
-              ) : null}
-            </div>
-            <div className='flex-1 min-h-0'>
-              <CategoryChart
-                dataByCategory={sumsByCategories?.getSumByCategory ?? []}
-                loading={loadingByCategory}
-              />
-            </div>
+    <div className='grid min-[961px]:h-full grid-cols-1 text-white min-[961px]:grid-cols-[7fr_7fr_10fr] min-[961px]:grid-rows-[minmax(0,4fr)_minmax(0,3fr)_minmax(0,3fr)] min-[961px]:[grid-template-areas:"welcome_welcome_activities""yearly_yearly_activities""equivalences_goal_tips"]'>
+      <div className='p-3 min-h-fit min-[961px]:[grid-area:welcome]'>
+        <div className='h-full glassCard shadow-2xl p-7 min-h-fit flex flex-col'>
+          <div className='mb-4 flex items-center justify-between'>
+            <Typography as='h1' variant='heading'>
+              Bienvenue{' '}
+              <span className='text-sm font-light text-white/70'>
+                Répartition d&apos;émissions par catégories
+              </span>
+            </Typography>
+            {userHasName ? (
+              <Button variant='outline' onClick={copyToClipboard}>
+                Partager mon profil
+              </Button>
+            ) : null}
           </div>
-        </div>
-        <div className='h-[28%]  p-3'>
-          <div className='h-full glassCard shadow-2xl p-7 flex flex-col'>
-            <div className='mb-4 flex items-center justify-between'>
-              <Typography as='h2' variant='heading'>
-                Dépenses annuelles
-              </Typography>
-            </div>
-            <div className='flex-1 min-h-0'>
-              <ByMonthChart
-                dataByMonth={sumsByMonth?.getSumByMonth ?? []}
-                loading={loadingByMonth}
-              />
-            </div>
+          <div className='flex-1 min-h-0'>
+            <CategoryChart
+              dataByCategory={sumsByCategories?.getSumByCategory ?? []}
+              loading={loadingByCategory}
+            />
           </div>
-        </div>
-        <div className='h-[28%]  p-3'>
-          <LastPostWidget
-            posts={data?.getAllPosts ?? []}
-            handleRefetchPosts={handleRefetchPosts}
-          />
         </div>
       </div>
-      <div className='w-5/12 p-3  h-full max-[960px]:w-full'>
+      <div className='p-3 min-[961px]:[grid-area:equivalences]'>
+        <EquivalencesWidget />
+      </div>
+      <div className='p-3 min-[961px]:[grid-area:goal]'>
+        <CarbonGoalWidget />
+      </div>
+      {/* Chart.js runs with maintainAspectRatio: false, so the chart needs an explicit height on mobile */}
+      <div className='p-3 h-80 min-[961px]:h-auto min-[961px]:[grid-area:yearly]'>
+        <DashboardCard title='Dépenses annuelles'>
+          <ByMonthChart
+            dataByMonth={sumsByMonth?.getSumByMonth ?? []}
+            loading={loadingByMonth}
+          />
+        </DashboardCard>
+      </div>
+      <div className='p-3 min-[961px]:[grid-area:tips]'>
+        <TipsWidget />
+      </div>
+      {/* Last in the DOM so that, once stacked, its long list does not push the other widgets down */}
+      <div className='p-3 min-[961px]:[grid-area:activities]'>
         <LastActivitiesListWidget
           handleRefetch={() => {
             refetchTotalsByCategories();
