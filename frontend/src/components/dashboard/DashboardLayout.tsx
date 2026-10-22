@@ -8,6 +8,7 @@ import CategoryChart from './dataViz/CategoryChart';
 import LastActivitiesListWidget from './lastActivitiesList/LastActivitiesListWidget';
 import LastPostWidget from './lastPost/LastPostWidget';
 import Button from '../commons/buttons/Button';
+import Typography from '../commons/typography/Typography';
 import { useUser } from '@/contexts/UserContext';
 import { useAlert } from '@/contexts/AlertContext';
 
@@ -45,34 +46,41 @@ export default function DashboardLayout() {
     <div className='flex h-full text-white max-[960px]:flex-col'>
       <div className='w-7/12 h-full min-h-fit max-[960px]:w-full'>
         <div className='h-[44%] p-3 max-[960px]: min-h-fit'>
-          <div className='h-full glassCard shadow-2xl p-7 min-h-fit'>
-            <div className='flex items-center justify-between'>
-              <h1 className='text-xl poppins-bold'>
+          <div className='h-full glassCard shadow-2xl p-7 min-h-fit flex flex-col'>
+            <div className='mb-4 flex items-center justify-between'>
+              <Typography as='h1' variant='heading'>
                 Bienvenue{' '}
-                <span className='text-sm poppins-light text-white/70'>
-                  Répartition d&apos;émissons par catégories
+                <span className='text-sm font-light text-white/70'>
+                  Répartition d&apos;émissions par catégories
                 </span>
-              </h1>
+              </Typography>
               {userHasName ? (
                 <Button variant='outline' onClick={copyToClipboard}>
                   Partager mon profil
                 </Button>
               ) : null}
             </div>
-
-            <CategoryChart
-              dataByCategory={sumsByCategories?.getSumByCategory ?? []}
-              loading={loadingByCategory}
-            />
+            <div className='flex-1 min-h-0'>
+              <CategoryChart
+                dataByCategory={sumsByCategories?.getSumByCategory ?? []}
+                loading={loadingByCategory}
+              />
+            </div>
           </div>
         </div>
         <div className='h-[28%]  p-3'>
-          <div className='h-full glassCard shadow-2xl p-7'>
-            <div className='text-xl poppins-bold'>Dépenses annuelles</div>
-            <ByMonthChart
-              dataByMonth={sumsByMonth?.getSumByMonth ?? []}
-              loading={loadingByMonth}
-            />
+          <div className='h-full glassCard shadow-2xl p-7 flex flex-col'>
+            <div className='mb-4 flex items-center justify-between'>
+              <Typography as='h2' variant='heading'>
+                Dépenses annuelles
+              </Typography>
+            </div>
+            <div className='flex-1 min-h-0'>
+              <ByMonthChart
+                dataByMonth={sumsByMonth?.getSumByMonth ?? []}
+                loading={loadingByMonth}
+              />
+            </div>
           </div>
         </div>
         <div className='h-[28%]  p-3'>

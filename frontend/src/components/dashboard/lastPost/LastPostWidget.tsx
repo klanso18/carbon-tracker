@@ -52,35 +52,35 @@ export default function LastPostsWidget({
   const numberOfPostsToShow = getNumberOfPostsToShow();
   const lastPosts = sortedPosts.slice(0, numberOfPostsToShow);
 
+  // The modal stays outside the glass card: backdrop-filter would otherwise
+  // become the containing block of the fixed overlay and trap the modal inside the card
   return (
-    <div className='h-full'>
-      <Typography variant='heading'>Derniers posts</Typography>
-      <div className='flex flex-row h-[88%] '>
-        {lastPosts.map((post) => (
-          <LastPostItem
-            key={post.id}
-            profilImg={
-              post?.user.picture != null
-                ? post?.user.picture
-                : '/icons/avatar.svg'
-            }
-            postTitle={post.title}
-            postContent={post.content}
-          />
-        ))}
-        {!readOnly ? (
-          <div className='flex flex-col justify-center w-[200px] mt-2 glassCard shadow-2xl p-7 align-center transition-colors hover:bg-white/10'>
-            <div className='flex justify-center m-5'>
-              <button onClick={toggleModal} className='flex justify-center'>
-                <img
-                  src='/icons/cross.png'
-                  alt='new-post'
-                  className='brightness-0 invert'
-                />
-              </button>
-            </div>
-          </div>
-        ) : null}
+    <>
+      <div className='glassCard shadow-2xl p-7 flex flex-col h-full'>
+        <div className='mb-4 flex items-center justify-between'>
+          <Typography as='h2' variant='heading'>
+            Derniers posts
+          </Typography>
+          {!readOnly ? (
+            <button onClick={toggleModal}>
+              <img src='/button-plus.svg' alt='add a post' />
+            </button>
+          ) : null}
+        </div>
+        <div className='flex flex-row flex-1 min-h-0'>
+          {lastPosts.map((post) => (
+            <LastPostItem
+              key={post.id}
+              profilImg={
+                post?.user.picture != null
+                  ? post?.user.picture
+                  : '/icons/avatar.svg'
+              }
+              postTitle={post.title}
+              postContent={post.content}
+            />
+          ))}
+        </div>
       </div>
       {isModalOpen && (
         <AddPostModal
@@ -89,6 +89,6 @@ export default function LastPostsWidget({
         />
       )}
       {isModalOpen && <div className='overlay'></div>}
-    </div>
+    </>
   );
 }

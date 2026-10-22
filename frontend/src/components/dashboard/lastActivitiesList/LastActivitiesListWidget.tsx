@@ -23,8 +23,10 @@ export default function LastActivitiesListWidget({ handleRefetch }: Props) {
   return (
     <>
       <div className='glassCard shadow-2xl p-7 flex flex-col h-full'>
-        <div className='mb-6 flex justify-between align-center'>
-          <Typography variant='heading'>Dernières dépenses</Typography>
+        <div className='mb-4 flex items-center justify-between'>
+          <Typography as='h2' variant='heading'>
+            Dernières dépenses
+          </Typography>
           <button onClick={toggleModal}>
             <img src='/button-plus.svg' alt='add an activity entry' />
           </button>
