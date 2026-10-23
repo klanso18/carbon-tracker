@@ -58,20 +58,6 @@ export default class PostResolver {
     }
   }
 
-  @Query(() => [Post])
-  async getUserPosts(@Arg('userId') userId: string) {
-    try {
-      const userPosts = await Post.find({
-        where: { user: { id: userId } },
-        relations: ['user'],
-      });
-      return userPosts;
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      throw new GraphQLError('An error occurred while fetching posts');
-    }
-  }
-
   @Authorized()
   @Query(() => Post, { nullable: true })
   async getPostById(@Arg('postId') postId: number) {

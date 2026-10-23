@@ -25,7 +25,6 @@ export default class ActivityEntryResolver {
   async activityEntries(
     @Ctx() ctx: MyContext,
     @Arg('categoryId', () => Int, { nullable: true }) categoryId?: number,
-    @Arg('userId', () => String, { nullable: true }) userId?: string,
     @Arg('name', { nullable: true }) name?: string,
   ) {
     if (!ctx.user) {
@@ -91,16 +90,12 @@ export default class ActivityEntryResolver {
     });
   }
 
+  @Authorized()
   @Query(() => [SumByCategory])
-  async getSumByCategory(
-    @Ctx() ctx: MyContext,
-    @Arg('userId', { nullable: true }) userId?: string,
-  ): Promise<SumByCategory[]> {
-    if (!ctx.user && !userId) {
+  async getSumByCategory(@Ctx() ctx: MyContext): Promise<SumByCategory[]> {
+    if (!ctx.user) {
       throw new Error('You must be authenticated to access this information.');
     }
-
-    const userIdToUse = userId ?? ctx.user!.id;
 
     const sumByCategory = await ActivityEntry.createQueryBuilder(
       'activityEntry',
@@ -109,7 +104,7 @@ export default class ActivityEntryResolver {
       .select('category.name', 'categoryName')
       .addSelect('category.id', 'categoryId')
       .addSelect('SUM(activityEntry.input)', 'sumKgCO2')
-      .where('activityEntry.userId = :userId', { userId: userIdToUse })
+      .where('activityEntry.userId = :userId', { userId: ctx.user.id })
       .groupBy('category.id')
       .getRawMany<{
         categoryName: string;
@@ -120,17 +115,13 @@ export default class ActivityEntryResolver {
     return sumByCategory;
   }
 
+  @Authorized()
   @Query(() => [SumByMonth])
-  async getSumByMonth(
-    @Ctx() ctx: MyContext,
-    @Arg('userId', { nullable: true }) userId?: string,
-  ) {
-    if (!ctx.user && !userId) {
+  async getSumByMonth(@Ctx() ctx: MyContext) {
+    if (!ctx.user) {
       throw new Error('You must be authenticated to access this information.');
     }
     const currentDate = new Date();
-
-    const userIdToUse = userId ?? ctx.user!.id;
 
     const twelveMonthsAgo = new Date(currentDate);
     twelveMonthsAgo.setFullYear(currentDate.getFullYear() - 1);
@@ -138,7 +129,7 @@ export default class ActivityEntryResolver {
     const sumByMonth = await ActivityEntry.createQueryBuilder('activityEntry')
       .select("DATE_TRUNC('month', activityEntry.spendedAt)", 'month')
       .addSelect('SUM(activityEntry.input)', 'sumKgCO2')
-      .where('activityEntry.userId = :userId', { userId: userIdToUse })
+      .where('activityEntry.userId = :userId', { userId: ctx.user.id })
       .andWhere('activityEntry.spendedAt >= :twelveMonthsAgo', {
         twelveMonthsAgo,
       })

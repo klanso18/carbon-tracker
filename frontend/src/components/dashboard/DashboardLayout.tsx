@@ -9,15 +9,9 @@ import DashboardCard from './DashboardCard';
 import EquivalencesWidget from './equivalences/EquivalencesWidget';
 import CarbonGoalWidget from './carbonGoal/CarbonGoalWidget';
 import TipsWidget from './tips/TipsWidget';
-import Button from '../commons/buttons/Button';
 import Typography from '../commons/typography/Typography';
-import { useUser } from '@/contexts/UserContext';
-import { useAlert } from '@/contexts/AlertContext';
 
 export default function DashboardLayout() {
-  const { showAlert } = useAlert();
-  const { user } = useUser();
-
   const {
     data: sumsByCategories,
     loading: loadingByCategory,
@@ -31,16 +25,6 @@ export default function DashboardLayout() {
   } = useGetSumByMonthQuery();
   refetchTotalsByMonth();
   refetchTotalsByCategories();
-
-  const userHasName = user?.name != null;
-
-  const copyToClipboard = () => {
-    const userId = user?.id;
-    navigator.clipboard.writeText(
-      `https://develop.carbon-tracker.0923-bleu-1.wns.wilders.dev/profile/${userId}`,
-    );
-    showAlert('Copier dans le presse-papier !', 'success');
-  };
 
   // Desktop: named grid areas place the widgets (charts in the wide left column,
   // equivalences and goal side by side below them). Mobile: one column in DOM order.
@@ -57,11 +41,6 @@ export default function DashboardLayout() {
                 Répartition d&apos;émissions par catégories
               </span>
             </Typography>
-            {userHasName ? (
-              <Button variant='outline' onClick={copyToClipboard}>
-                Partager mon profil
-              </Button>
-            ) : null}
           </div>
           <div className='flex-1 min-h-0'>
             <CategoryChart
