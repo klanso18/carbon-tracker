@@ -3,6 +3,7 @@ import { Doughnut } from 'react-chartjs-2';
 import Image from 'next/image';
 import { SumByCategory } from '@/types';
 import CAT_COLOR_MAP from '@/utils/categoryColors';
+import formatEmission, { EMISSION_UNIT } from '@/utils/numberFormater';
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -74,7 +75,8 @@ export default function CategoryChart({ dataByCategory, loading }: Props) {
                     />
                   </div>
                   <div className='text-white poppins-semiBold text-lg text-nowrap max-[1220px]:text-sm'>
-                    {cat.sumKgCO2} <span>kgCO2</span>
+                    {formatEmission(Number(cat.sumKgCO2))}{' '}
+                    <span>{EMISSION_UNIT}</span>
                   </div>
                 </div>
               );

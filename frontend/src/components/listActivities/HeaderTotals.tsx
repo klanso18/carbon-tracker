@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
 import Typography from '../commons/typography/Typography';
 import Button from '../commons/buttons/Button';
-import formatEmission from '@/utils/numberFormater';
+import formatEmission, { EMISSION_UNIT } from '@/utils/numberFormater';
 
 type Props = {
   totalEmissions: number | undefined;
@@ -26,7 +26,7 @@ export default function HeaderTotals({ totalEmissions, onAddClick }: Props) {
               : '–'}
           </Typography>
           <Typography customClass='text-lg lg:text-xl xl:text-3xl font-semibold text-white'>
-            kgCO2
+            {EMISSION_UNIT}
           </Typography>
         </div>
         <div>
