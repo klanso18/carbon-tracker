@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { useEffect, useState } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, Plus } from 'lucide-react';
 import {
   useCreateActivityEntryMutation,
   useDeleteActivityEntryMutation,
@@ -17,6 +17,7 @@ import { Category, EntryData } from '@/types';
 import FilterModal from './FilterModal';
 import AddActivityModal from '../modal/AddActivityModal';
 import UpdateActivityModal from '../modal/UpdateActivityModal';
+import ConfirmModal from '../modal/ConfirmModal';
 import ActiveFiltersBar from './ActiveFiltersBar';
 import HeaderTotals from './HeaderTotals';
 
@@ -43,6 +44,10 @@ export default function ListActivities() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [entryToUpdate, setEntryToUpdate] = useState<EntryData | null>(null);
+  // Entries waiting for the user's confirmation before being deleted
+  const [entriesToDelete, setEntriesToDelete] = useState<EntryData[] | null>(
+    null,
+  );
 
   const [skip, setSkip] = useState(0);
   const take = 15;
@@ -120,6 +125,9 @@ export default function ListActivities() {
   const showActiveFiltersBar =
     (selectedCategoriesFilter ?? []).length > 0 || showDateFilterBadge;
 
+  const hasActiveFilters = searchedTerm !== '' || showActiveFiltersBar;
+  const isListEmpty = (activityEntries ?? []).length === 0;
+
   const toggleSelect = (activity: EntryData): void => {
     const isSelected = selectedEntries.some((a) => a.id === activity.id);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -157,10 +165,11 @@ export default function ListActivities() {
     }
   };
 
-  const handleDeleteSelection = async () => {
+  // Shared by the bulk "Supprimer" button and each row's menu, once confirmed
+  const handleDeleteEntries = async (entries: EntryData[]) => {
     try {
       await Promise.all(
-        selectedEntries.map(async (activity) => {
+        entries.map(async (activity) => {
           try {
             await deleteActivity({
               variables: { activityEntryId: activity.id },
@@ -172,10 +181,17 @@ export default function ListActivities() {
       );
       await refetch();
       await refetchTotals();
-      setSelectedEntries([]);
+      setSelectedEntries((prev) =>
+        prev.filter((selected) => !entries.some((e) => e.id === selected.id)),
+      );
     } catch (error) {
       // console.log(error);
     }
+  };
+
+  const confirmDeletion = async () => {
+    if (entriesToDelete) await handleDeleteEntries(entriesToDelete);
+    setEntriesToDelete(null);
   };
 
   const handleUpdateEntry = (entry: EntryData) => {
@@ -198,7 +214,7 @@ export default function ListActivities() {
   // The page itself does not scroll on desktop: header, toolbar and filters stay in place
   // and only the list scrolls (flex-1 + min-h-0 + overflow-y-auto on the list card)
   return (
-    <div className='flex h-full text-black '>
+    <div className='flex h-full'>
       <div className='w-full flex flex-col gap-3 p-3 min-h-0'>
         <HeaderTotals
           totalEmissions={totalCo2Sum}
@@ -235,7 +251,10 @@ export default function ListActivities() {
                 >
                   Dupliquer
                 </Button>
-                <Button variant='outline' onClick={handleDeleteSelection}>
+                <Button
+                  variant='outline'
+                  onClick={() => setEntriesToDelete(selectedEntries)}
+                >
                   Supprimer
                 </Button>
               </>
@@ -299,10 +318,43 @@ export default function ListActivities() {
         )}
 
         <div className='glassCard shadow-2xl p-2 flex-1 min-h-0 overflow-y-auto'>
-          {activityEntries?.length !== 0 ? (
+          {/* Empty list: loading, brand new user, or nothing matching the filters */}
+          {isListEmpty && loadingFiltered && (
+            <div className='h-full flex items-center justify-center'>
+              <Typography className='text-white/70'>Chargement…</Typography>
+            </div>
+          )}
+          {isListEmpty && !loadingFiltered && !hasActiveFilters && (
+            <div className='h-full flex flex-col items-center justify-center gap-4 text-center'>
+              <Typography className='text-light_green font-semibold'>
+                Vous n’avez encore aucune dépense
+              </Typography>
+              <Typography className='text-white/70'>
+                Ajoutez votre première dépense pour suivre vos émissions.
+              </Typography>
+              <Button
+                variant='outline'
+                size='lg'
+                className='text-lg flex items-center gap-2'
+                onClick={() => setShowModalCreate(true)}
+              >
+                <Plus size={20} aria-hidden='true' />
+                <span>Ajouter une dépense</span>
+              </Button>
+            </div>
+          )}
+          {isListEmpty && !loadingFiltered && hasActiveFilters && (
+            <div className='h-full flex items-center justify-center text-center'>
+              <Typography className='font-light text-light_green'>
+                Aucune dépense ne correspond à vos filtres et à votre recherche
+              </Typography>
+            </div>
+          )}
+          {!isListEmpty &&
             activityEntries?.map((activity) => (
               <ActivityEntry
                 onUpdate={(entry) => handleUpdateEntry(entry)}
+                onDelete={(entry) => setEntriesToDelete([entry])}
                 selected={selectedEntries.some((a) => a.id === activity.id)}
                 entryData={activity}
                 key={activity.id}
@@ -313,15 +365,8 @@ export default function ListActivities() {
                   await refetchTotals();
                 }}
               />
-            ))
-          ) : (
-            <div className='w-full min-h-[500px] flex justify-center mt-10 '>
-              <Typography customClass='text-md font-light text-light_green'>
-                Aucune activité ne correspond à vos filtres et recherche
-              </Typography>
-            </div>
-          )}
-          {!hideLoadMoreButton && (
+            ))}
+          {!isListEmpty && !hideLoadMoreButton && (
             <div className='mt-4 mb-2 flex justify-center'>
               <Button
                 variant='outline'
@@ -355,6 +400,19 @@ export default function ListActivities() {
         />
       )}
       {entryToUpdate && <div className='overlay'></div>}
+      {entriesToDelete && (
+        <ConfirmModal
+          title={
+            entriesToDelete.length > 1
+              ? `Supprimer ${entriesToDelete.length} dépenses ?`
+              : 'Supprimer cette dépense ?'
+          }
+          message='Cette action est définitive.'
+          confirmLabel='Supprimer'
+          onConfirm={confirmDeletion}
+          onCancel={() => setEntriesToDelete(null)}
+        />
+      )}
     </div>
   );
 }

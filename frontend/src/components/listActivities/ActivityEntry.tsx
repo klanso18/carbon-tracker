@@ -4,10 +4,7 @@ import getDateFormated from '@/utils/dateFormater';
 import formatEmission, { EMISSION_UNIT } from '@/utils/numberFormater';
 import InputCheckbox from '@/components/commons/inputs/InputCheckbox';
 import ActivityEntryActionsModal from './ActivityEntryActionsModal';
-import {
-  useCreateActivityEntryMutation,
-  useDeleteActivityEntryMutation,
-} from '@/graphql/generated/schema';
+import { useCreateActivityEntryMutation } from '@/graphql/generated/schema';
 import { EntryData } from '@/types';
 import Highlight from '../commons/search/Highlight';
 
@@ -20,6 +17,9 @@ type Props = {
   searchedTerm: string;
   onCheckChange: () => void;
   onUpdate: (entry: EntryData) => void;
+  // Deletion is confirmed and performed by the parent: its confirm modal must live
+  // outside the list's glass card, whose backdrop-filter would trap a fixed overlay
+  onDelete: (entry: EntryData) => void;
   handleRefetch: () => void;
 };
 
@@ -29,11 +29,11 @@ export default function ActivityEntry({
   searchedTerm,
   onCheckChange,
   onUpdate,
+  onDelete,
   handleRefetch,
 }: Props) {
   const [showActionModal, setShowActionModal] = useState(false);
   const [menuDirection, setMenuDirection] = useState<'down' | 'up'>('down');
-  const [deleteActivity] = useDeleteActivityEntryMutation();
   const [createActivity] = useCreateActivityEntryMutation();
 
   const handleModify = () => {
@@ -58,15 +58,6 @@ export default function ActivityEntry({
     }
   };
 
-  const handleDelete = async (entry: EntryData) => {
-    try {
-      await deleteActivity({ variables: { activityEntryId: entry.id } });
-      handleRefetch();
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
   const modalActions = [
     {
       label: 'Modifier',
@@ -78,7 +69,7 @@ export default function ActivityEntry({
     },
     {
       label: 'Supprimer',
-      action: () => handleDelete(entryData),
+      action: () => onDelete(entryData),
     },
   ];
 
