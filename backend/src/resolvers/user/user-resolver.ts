@@ -29,11 +29,6 @@ export default class UserResolver {
     return UserService.readByMail(email);
   }
 
-  @Query(() => User, { nullable: true })
-  async userById(@Arg('id') id: string) {
-    return UserService.readById(id);
-  }
-
   @Query(() => Message)
   async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await UserService.readByMail(infos.email);
