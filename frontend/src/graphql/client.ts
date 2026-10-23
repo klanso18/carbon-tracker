@@ -13,8 +13,7 @@ const logoutLink = onError((err) => {
   if (
     ['UNAUTHORIZED', 'UNAUTHENTICATED'].includes(errorCode) &&
     err?.operation?.operationName !== 'Profile' &&
-    !window.location.pathname.includes('/login') &&
-    !window.location.pathname.includes('/profile/')
+    !window.location.pathname.includes('/login')
   ) {
     if (errorCode === 'UNAUTHENTICATED') {
       window.location.href = `/auth/login`;

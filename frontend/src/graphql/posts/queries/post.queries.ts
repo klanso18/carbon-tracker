@@ -34,23 +34,6 @@ export const GET_POST = gql`
   }
 `;
 
-export const GET_USER_POSTS = gql`
-  query GetUserPosts($userId: String!) {
-    getUserPosts(userId: $userId) {
-      id
-      title
-      content
-      createdAt
-      updatedAt
-      user {
-        id
-        name
-        picture
-      }
-    }
-  }
-`;
-
 export const GET_PAGINATED_POSTS = gql`
   query GetPaginatedPosts($skip: Int!, $take: Int!, $userId: String) {
     getPaginatedPosts(skip: $skip, take: $take, userId: $userId) {
