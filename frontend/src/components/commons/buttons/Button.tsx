@@ -15,7 +15,7 @@ export default function Button({
   ...props
 }: GenericButtonProps) {
   const baseClasses =
-    'text-sm cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out';
+    'text-sm cursor-pointer text-white shadow-sm transition-colors duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
   const variantClasses =
     variant === 'outline'

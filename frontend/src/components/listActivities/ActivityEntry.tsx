@@ -79,7 +79,7 @@ export default function ActivityEntry({
   return (
     <div className='flex justify-between items-center p-4 border-b border-white/10 last:border-b-0 text-white transition-colors hover:bg-white/5'>
       <div className='flex items-center w-[20%] min-w-fit max-[1500px]:w-[25%] max-lg:w-fit mr-2'>
-        <div className='p-2 mr-7 max-lg:mr-1 p-1 max-sm:mr-0'>
+        <div className='p-2 mr-7 max-lg:mr-1 max-sm:mr-0'>
           <InputCheckbox
             id={entryData.id.toString()}
             label=''
