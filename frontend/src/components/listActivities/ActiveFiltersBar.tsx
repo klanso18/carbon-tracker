@@ -35,7 +35,7 @@ export default function ActiveFiltersBar({
   }
 
   return (
-    <div className='glassCard shadow-2xl flex items-center justify-between p-5 mt-3'>
+    <div className='glassCard shadow-2xl flex items-center justify-between p-5'>
       <div className='flex flex-wrap'>
         {selectedCategoriesFilter.map((cat) => (
           <ActiveFilterBagde

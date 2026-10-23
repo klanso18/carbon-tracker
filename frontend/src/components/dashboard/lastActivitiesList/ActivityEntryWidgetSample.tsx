@@ -1,6 +1,7 @@
 import Typography from '@/components/commons/typography/Typography';
 import { ActivityEntriesQuery } from '@/graphql/generated/schema';
 import getDateFormated from '@/utils/dateFormater';
+import formatEmission, { EMISSION_UNIT } from '@/utils/numberFormater';
 
 type Props = {
   entryData: ActivityEntriesQuery['activityEntries'][0];
@@ -32,11 +33,11 @@ export default function ActivityEntryWidgetSample({ entryData }: Props) {
       <div className='flex flex-col text-right min-w-[100px]'>
         <div>
           <Typography className='text-light_green poppins-bold text-lg'>
-            {entryData?.input} Kg
+            {formatEmission(entryData.input)}
           </Typography>
         </div>
         <div>
-          <Typography className='text-white/70'>CO2</Typography>
+          <Typography className='text-white/70'>{EMISSION_UNIT}</Typography>
         </div>
       </div>
     </div>

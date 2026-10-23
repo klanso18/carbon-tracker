@@ -1,6 +1,7 @@
 import { defaults } from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import { SumByMonth } from '@/types';
+import formatEmission, { EMISSION_UNIT } from '@/utils/numberFormater';
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -42,7 +43,7 @@ export default function ByMonthChart({ dataByMonth, loading }: Props) {
         callbacks: {
           label(ctx: any) {
             const value = ctx.raw || 0;
-            return `${value} kgCO2`;
+            return `${formatEmission(Number(value))} ${EMISSION_UNIT}`;
           },
         },
       },

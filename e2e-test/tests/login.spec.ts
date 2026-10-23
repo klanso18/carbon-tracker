@@ -26,10 +26,14 @@ test('can connect with correct credentials', async ({ page }) => {
   await page.getByPlaceholder('carbone@gmail.com').fill(email);
   await page.getByPlaceholder('*******').fill(password);
   await page.getByRole('main').click({
-    button: 'left'
+    button: 'left',
   });
   await page.getByTestId('submit').click();
-  await expect(page.getByRole('heading', { name: 'Bienvenue' })).toBeVisible()
+  // Dev server compiles /home on first visit: wait for the redirect, then allow time for the render
+  await page.waitForURL('**/home');
+  await expect(page.getByRole('heading', { name: 'Bienvenue' })).toBeVisible({
+    timeout: 15_000,
+  });
 });
 
 test('cannot connect with WRONG credentials', async ({ page }) => {
@@ -37,8 +41,8 @@ test('cannot connect with WRONG credentials', async ({ page }) => {
   await page.getByPlaceholder('carbone@gmail.com').fill(email);
   await page.getByPlaceholder('*******').fill('wrongPassword');
   await page.getByRole('main').click({
-    button: 'left'
+    button: 'left',
   });
   await page.getByTestId('submit').click();
-  await expect(page.getByText('Vérifiez vos informations...')).toBeVisible()
+  await expect(page.getByText('Vérifiez vos informations...')).toBeVisible();
 });

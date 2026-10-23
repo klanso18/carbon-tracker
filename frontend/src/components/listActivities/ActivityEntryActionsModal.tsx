@@ -6,6 +6,8 @@ type Props = {
   onClose: () => void;
   actions: { label: string; action: () => void }[];
   alignment?: 'right' | 'left';
+  // 'up' opens the menu above its trigger, for rows near the bottom of a scrolling list
+  direction?: 'down' | 'up';
 };
 
 export default function ActivityEntryActionsModal({
@@ -13,6 +15,7 @@ export default function ActivityEntryActionsModal({
   onClose,
   actions,
   alignment = 'right',
+  direction = 'down',
 }: Props) {
   const [opened, setOpened] = useState(isOpened);
 
@@ -31,11 +34,11 @@ export default function ActivityEntryActionsModal({
           ref={ref}
           onClick={(e) => e.stopPropagation()}
           className='glassPanel z-10 rounded-2xl overflow-hidden'
-          style={
-            alignment === 'left'
-              ? { left: '0%', position: 'absolute' }
-              : { right: '0%', position: 'absolute' }
-          }
+          style={{
+            position: 'absolute',
+            ...(alignment === 'left' ? { left: '0%' } : { right: '0%' }),
+            ...(direction === 'up' ? { bottom: '100%' } : {}),
+          }}
         >
           {actions.map(({ label, action }, index) => (
             <div

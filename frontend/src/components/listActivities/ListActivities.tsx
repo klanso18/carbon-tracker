@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { useEffect, useState } from 'react';
-import clsx from 'clsx';
+import { ChevronDown, Filter, Plus } from 'lucide-react';
 import {
   useCreateActivityEntryMutation,
   useDeleteActivityEntryMutation,
@@ -12,12 +12,12 @@ import Typography from '../commons/typography/Typography';
 import InputCheckbox from '../commons/inputs/InputCheckbox';
 import Button from '../commons/buttons/Button';
 import InputLabel from '@/components/commons/inputs/InputLabel';
-import ActivityEntryActionsModal from './ActivityEntryActionsModal';
 import ActivityEntry from './ActivityEntry';
 import { Category, EntryData } from '@/types';
 import FilterModal from './FilterModal';
 import AddActivityModal from '../modal/AddActivityModal';
 import UpdateActivityModal from '../modal/UpdateActivityModal';
+import ConfirmModal from '../modal/ConfirmModal';
 import ActiveFiltersBar from './ActiveFiltersBar';
 import HeaderTotals from './HeaderTotals';
 
@@ -41,10 +41,13 @@ export default function ListActivities() {
     to: string;
   }>({ from: '', to: '' });
 
-  const [showActionModal, setShowActionModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [entryToUpdate, setEntryToUpdate] = useState<EntryData | null>(null);
+  // Entries waiting for the user's confirmation before being deleted
+  const [entriesToDelete, setEntriesToDelete] = useState<EntryData[] | null>(
+    null,
+  );
 
   const [skip, setSkip] = useState(0);
   const take = 15;
@@ -76,6 +79,9 @@ export default function ListActivities() {
   const [activityEntries, setActivityEntries] = useState(
     filteredResults?.filteredActivityEntries,
   );
+  const allSelected =
+    (activityEntries?.length ?? 0) > 0 &&
+    activityEntries?.length === selectedEntries.length;
 
   useEffect(() => {
     if (filteredResults?.filteredActivityEntries) {
@@ -119,6 +125,9 @@ export default function ListActivities() {
   const showActiveFiltersBar =
     (selectedCategoriesFilter ?? []).length > 0 || showDateFilterBadge;
 
+  const hasActiveFilters = searchedTerm !== '' || showActiveFiltersBar;
+  const isListEmpty = (activityEntries ?? []).length === 0;
+
   const toggleSelect = (activity: EntryData): void => {
     const isSelected = selectedEntries.some((a) => a.id === activity.id);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -128,6 +137,7 @@ export default function ListActivities() {
   };
 
   const handleDuplicateSelection = async () => {
+    if (allSelected) return;
     try {
       await Promise.all(
         selectedEntries.map(async (activity) => {
@@ -155,10 +165,11 @@ export default function ListActivities() {
     }
   };
 
-  const handleDeleteSelection = async () => {
+  // Shared by the bulk "Supprimer" button and each row's menu, once confirmed
+  const handleDeleteEntries = async (entries: EntryData[]) => {
     try {
       await Promise.all(
-        selectedEntries.map(async (activity) => {
+        entries.map(async (activity) => {
           try {
             await deleteActivity({
               variables: { activityEntryId: activity.id },
@@ -170,25 +181,22 @@ export default function ListActivities() {
       );
       await refetch();
       await refetchTotals();
-      setSelectedEntries([]);
+      setSelectedEntries((prev) =>
+        prev.filter((selected) => !entries.some((e) => e.id === selected.id)),
+      );
     } catch (error) {
       // console.log(error);
     }
   };
 
+  const confirmDeletion = async () => {
+    if (entriesToDelete) await handleDeleteEntries(entriesToDelete);
+    setEntriesToDelete(null);
+  };
+
   const handleUpdateEntry = (entry: EntryData) => {
     setEntryToUpdate(entry);
   };
-  const modalActions = [
-    {
-      label: 'Dupliquer',
-      action: () => handleDuplicateSelection(),
-    },
-    {
-      label: 'Supprimer',
-      action: () => handleDeleteSelection(),
-    },
-  ];
 
   const handleToggleCatSelection = (category: Category) => {
     const isSelected = (selectedCategoriesFilter ?? []).some(
@@ -201,26 +209,27 @@ export default function ListActivities() {
         );
   };
 
+  const selectedCount = selectedEntries.length;
+
+  // The page itself does not scroll on desktop: header, toolbar and filters stay in place
+  // and only the list scrolls (flex-1 + min-h-0 + overflow-y-auto on the list card)
   return (
-    <div className='flex  h-full text-black '>
-      <div className=' w-full flex flex-col p-10 pb-0 max-[1710px]:p-2'>
-        <HeaderTotals totalEmissions={totalCo2Sum} />
+    <div className='flex h-full'>
+      <div className='w-full flex flex-col gap-3 p-3 min-h-0'>
+        <HeaderTotals
+          totalEmissions={totalCo2Sum}
+          onAddClick={() => setShowModalCreate(true)}
+        />
         {/* backdrop-blur creates a stacking context: lift the toolbar so its dropdowns render above the list */}
-        <div className='glassCard shadow-2xl flex items-center justify-between p-5 relative z-10'>
-          <div className='flex items-center'>
-            <div className=''>
+        <div className='glassCard shadow-2xl flex flex-wrap items-center justify-between gap-3 p-5 relative z-10'>
+          <div className='flex flex-wrap items-center gap-4'>
+            <div className='pl-3'>
               <InputCheckbox
                 id={'selectBarBox'}
                 label=''
                 disabled={activityEntries?.length === 0}
-                checked={
-                  activityEntries?.length === selectedEntries.length &&
-                  activityEntries.length !== 0
-                }
-                partiallyChecked={
-                  partiallyChecked &&
-                  activityEntries?.length !== selectedEntries.length
-                }
+                checked={allSelected}
+                partiallyChecked={partiallyChecked && !allSelected}
                 onChange={() =>
                   partiallyChecked
                     ? setSelectedEntries([])
@@ -229,40 +238,31 @@ export default function ListActivities() {
                 variant='dark'
               />
             </div>
-            <div
-              className={clsx('cursor-pointer p-2 relative', {
-                'opacity-25 cursor-default': selectedEntries.length === 0,
-              })}
-              onClick={() =>
-                selectedEntries.length !== 0 && setShowActionModal(true)
-              }
-            >
-              <img
-                src='/vertical-dots.svg'
-                width={6}
-                height={4}
-                className='invert'
-              />
-              <ActivityEntryActionsModal
-                actions={modalActions}
-                isOpened={showActionModal}
-                onClose={() => setShowActionModal(false)}
-                alignment='left'
-              />
-            </div>
-            <div className='ml-10 max-[970px]:ml-2 mr-2'>
-              <Button
-                variant='outline'
-                size='lg'
-                className='text-lg flex items-center'
-                onClick={() => setShowModalCreate(true)}
-              >
-                <img src={'/plus-icon.svg'} width={20} height={20} />{' '}
-                <span className='ml-2 max-[970px]:hidden'>
-                  Ajouter une dépense
-                </span>
-              </Button>
-            </div>
+            {/* Bulk actions are shown as soon as something is selected, instead of hidden behind a menu */}
+            {selectedCount > 0 ? (
+              <>
+                <Typography className='text-white/70 whitespace-nowrap'>
+                  {selectedCount} sélectionnée{selectedCount > 1 ? 's' : ''}
+                </Typography>
+                <Button
+                  variant='outline'
+                  disabled={allSelected}
+                  onClick={handleDuplicateSelection}
+                >
+                  Dupliquer
+                </Button>
+                <Button
+                  variant='outline'
+                  onClick={() => setEntriesToDelete(selectedEntries)}
+                >
+                  Supprimer
+                </Button>
+              </>
+            ) : (
+              <Typography className='text-white/70 max-sm:hidden'>
+                Tout sélectionner
+              </Typography>
+            )}
           </div>
           <div className='flex items-center'>
             <div className='w-[300px]  max-[970px]:w-[200px]'>
@@ -281,11 +281,11 @@ export default function ListActivities() {
               <Button
                 variant='outline'
                 size='lg'
-                className='text-lg flex items-center'
+                className='text-lg flex items-center gap-2'
                 onClick={() => setShowFilterModal((s) => !s)}
               >
-                <img src={'/filter-icon.svg'} width={20} height={20} />
-                <span className='ml-2 max-[970px]:hidden'>Filtrer</span>
+                <Filter size={20} aria-hidden='true' />
+                <span>Filtrer</span>
               </Button>
               <FilterModal
                 selectedCategories={selectedCategoriesFilter ?? []}
@@ -317,11 +317,44 @@ export default function ListActivities() {
           />
         )}
 
-        <div className='glassCard shadow-2xl overflow-auto h-max mt-3 p-2'>
-          {activityEntries?.length !== 0 ? (
+        <div className='glassCard shadow-2xl p-2 flex-1 min-h-0 overflow-y-auto'>
+          {/* Empty list: loading, brand new user, or nothing matching the filters */}
+          {isListEmpty && loadingFiltered && (
+            <div className='h-full flex items-center justify-center'>
+              <Typography className='text-white/70'>Chargement…</Typography>
+            </div>
+          )}
+          {isListEmpty && !loadingFiltered && !hasActiveFilters && (
+            <div className='h-full flex flex-col items-center justify-center gap-4 text-center'>
+              <Typography className='text-light_green font-semibold'>
+                Vous n’avez encore aucune dépense
+              </Typography>
+              <Typography className='text-white/70'>
+                Ajoutez votre première dépense pour suivre vos émissions.
+              </Typography>
+              <Button
+                variant='outline'
+                size='lg'
+                className='text-lg flex items-center gap-2'
+                onClick={() => setShowModalCreate(true)}
+              >
+                <Plus size={20} aria-hidden='true' />
+                <span>Ajouter une dépense</span>
+              </Button>
+            </div>
+          )}
+          {isListEmpty && !loadingFiltered && hasActiveFilters && (
+            <div className='h-full flex items-center justify-center text-center'>
+              <Typography className='font-light text-light_green'>
+                Aucune dépense ne correspond à vos filtres et à votre recherche
+              </Typography>
+            </div>
+          )}
+          {!isListEmpty &&
             activityEntries?.map((activity) => (
               <ActivityEntry
                 onUpdate={(entry) => handleUpdateEntry(entry)}
+                onDelete={(entry) => setEntriesToDelete([entry])}
                 selected={selectedEntries.some((a) => a.id === activity.id)}
                 entryData={activity}
                 key={activity.id}
@@ -332,18 +365,16 @@ export default function ListActivities() {
                   await refetchTotals();
                 }}
               />
-            ))
-          ) : (
-            <div className='w-full min-h-[500px] flex justify-center mt-10 '>
-              <Typography customClass='text-md font-light text-light_green'>
-                Aucune activité ne correspond à vos filtres et recherche
-              </Typography>
-            </div>
-          )}
-          {!hideLoadMoreButton && (
-            <div className='m-2 flex justify-center'>
-              <Button variant='outline' onClick={() => handleLoadMore()}>
-                voir plus
+            ))}
+          {!isListEmpty && !hideLoadMoreButton && (
+            <div className='mt-4 mb-2 flex justify-center'>
+              <Button
+                variant='outline'
+                className='!rounded-full !p-2 flex items-center justify-center'
+                onClick={() => handleLoadMore()}
+                aria-label='Voir plus d’activités'
+              >
+                <ChevronDown size={20} aria-hidden='true' />
               </Button>
             </div>
           )}
@@ -369,6 +400,19 @@ export default function ListActivities() {
         />
       )}
       {entryToUpdate && <div className='overlay'></div>}
+      {entriesToDelete && (
+        <ConfirmModal
+          title={
+            entriesToDelete.length > 1
+              ? `Supprimer ${entriesToDelete.length} dépenses ?`
+              : 'Supprimer cette dépense ?'
+          }
+          message='Cette action est définitive.'
+          confirmLabel='Supprimer'
+          onConfirm={confirmDeletion}
+          onCancel={() => setEntriesToDelete(null)}
+        />
+      )}
     </div>
   );
 }
