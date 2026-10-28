@@ -39,8 +39,11 @@ export default class UserResolver {
         .setExpirationTime('2h')
         .sign(new TextEncoder().encode(`${process.env.SECRET_KEY}`));
 
-      const cookies = new Cookies(ctx.req, ctx.res);
-      cookies.set('token', token, { httpOnly: true });
+      // TLS is terminated upstream of the gateway, so the backend only sees
+      // plain HTTP: tell `cookies` explicitly when the browser side is HTTPS.
+      const secure = process.env.COOKIE_SECURE === 'true';
+      const cookies = new Cookies(ctx.req, ctx.res, { secure });
+      cookies.set('token', token, { httpOnly: true, sameSite: 'lax', secure });
 
       result.message = 'Welcome!';
       result.success = true;
@@ -104,9 +107,7 @@ export default class UserResolver {
     const data = { picture, name };
 
     Object.assign(userToUpdate, data);
-    console.log(data);
     const errors = await validate(userToUpdate);
-    console.log(errors);
     if (errors.length !== 0)
       throw new GraphQLError('Invalid data', { extensions: { errors } });
     await userToUpdate.save();
