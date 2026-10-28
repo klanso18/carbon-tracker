@@ -46,6 +46,8 @@ async function main() {
   const server = new ApolloServer<MyContext>({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    // Opt-in only: an unset NODE_ENV must not leak stacktraces.
+    includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
   });
 
   await server.start();

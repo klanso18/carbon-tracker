@@ -196,7 +196,6 @@ export type Query = {
   login: Message;
   logout: Message;
   tags: Array<Book>;
-  userByEmail?: Maybe<User>;
   users: Array<User>;
 };
 
@@ -248,10 +247,6 @@ export type QueryTagsArgs = {
   title?: InputMaybe<Scalars['String']>;
 };
 
-
-export type QueryUserByEmailArgs = {
-  email: Scalars['String'];
-};
 
 export type SumByCategory = {
   __typename?: 'SumByCategory';

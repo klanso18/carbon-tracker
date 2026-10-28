@@ -5,7 +5,6 @@ import Cookies from 'cookies';
 import { SignJWT } from 'jose';
 import { GraphQLError } from 'graphql';
 import { validate } from 'class-validator';
-import { Raw } from 'typeorm';
 import { db } from '../../db';
 import User from '../../entities/user/user';
 import InputRegister from '../../entities/user/input-register';
@@ -22,11 +21,6 @@ export default class UserResolver {
   async users() {
     const userRepository = db.getRepository(User);
     return userRepository.find();
-  }
-
-  @Query(() => User, { nullable: true })
-  async userByEmail(@Arg('email') email: string) {
-    return UserService.readByMail(email);
   }
 
   @Query(() => Message)
