@@ -55,7 +55,7 @@ export default class User extends BaseEntity {
   @Field()
   email: string;
 
-  @Field()
+  // Not exposed in GraphQL: the hash must never leave the server.
   @Column()
   password: string;
 

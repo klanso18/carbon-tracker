@@ -271,7 +271,6 @@ export type User = {
   id: Scalars['String'];
   likedPosts: Array<Post>;
   name?: Maybe<Scalars['String']>;
-  password: Scalars['String'];
   picture?: Maybe<Scalars['String']>;
   posts: Array<Post>;
   updatedAt?: Maybe<Scalars['DateTimeISO']>;
