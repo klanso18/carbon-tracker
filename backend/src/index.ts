@@ -31,6 +31,11 @@ const app = express();
 const httpServer = http.createServer(app);
 
 async function main() {
+  // Fail fast: without it, JWTs would be signed with a guessable key.
+  if (!process.env.SECRET_KEY) {
+    throw new Error('SECRET_KEY environment variable is required');
+  }
+
   const schema = await buildSchema({
     resolvers: [
       BookResolver,
@@ -46,6 +51,8 @@ async function main() {
   const server = new ApolloServer<MyContext>({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    // Opt-in only: an unset NODE_ENV must not leak stacktraces.
+    includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
   });
 
   await server.start();

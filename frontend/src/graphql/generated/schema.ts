@@ -196,7 +196,6 @@ export type Query = {
   login: Message;
   logout: Message;
   tags: Array<Book>;
-  userByEmail?: Maybe<User>;
   users: Array<User>;
 };
 
@@ -249,10 +248,6 @@ export type QueryTagsArgs = {
 };
 
 
-export type QueryUserByEmailArgs = {
-  email: Scalars['String'];
-};
-
 export type SumByCategory = {
   __typename?: 'SumByCategory';
   categoryId: Scalars['Float'];
@@ -276,7 +271,6 @@ export type User = {
   id: Scalars['String'];
   likedPosts: Array<Post>;
   name?: Maybe<Scalars['String']>;
-  password: Scalars['String'];
   picture?: Maybe<Scalars['String']>;
   posts: Array<Post>;
   updatedAt?: Maybe<Scalars['DateTimeISO']>;

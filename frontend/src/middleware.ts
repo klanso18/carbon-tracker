@@ -9,6 +9,9 @@ interface Payload {
 const SECRET_KEY = process.env.SECRET_KEY || '';
 
 export async function verify(token: string): Promise<Payload> {
+  if (!SECRET_KEY) {
+    throw new Error('SECRET_KEY environment variable is required');
+  }
   const { payload } = await jwtVerify<Payload>(
     token,
     new TextEncoder().encode(SECRET_KEY),
