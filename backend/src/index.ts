@@ -31,6 +31,11 @@ const app = express();
 const httpServer = http.createServer(app);
 
 async function main() {
+  // Fail fast: without it, JWTs would be signed with a guessable key.
+  if (!process.env.SECRET_KEY) {
+    throw new Error('SECRET_KEY environment variable is required');
+  }
+
   const schema = await buildSchema({
     resolvers: [
       BookResolver,
