@@ -5,7 +5,6 @@ import Category from '../entities/category/category';
 import User from '../entities/user/user';
 import ActivityEntryService from '../services/activity-entry-service';
 import CategoryService from '../services/category-service';
-import PostService from '../services/post-service';
 import UserService from '../services/user-service';
 
 export default async function resetDB() {
@@ -91,23 +90,6 @@ async function createActivities(user: User, categories: Category[]) {
   }
 }
 
-async function createPosts(users: User[]) {
-  const POST_PER_USER = 32;
-  const fakeContent =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
-  const fakeTitles = ['Bon plan test', 'Bon plan blabla', 'Toto Titre'];
-
-  for (const user of users) {
-    for (let i = 0; i < POST_PER_USER; i++) {
-      const titleIndex = i % fakeTitles.length;
-      const title = fakeTitles[titleIndex];
-      const content = fakeContent;
-
-      await PostService.create({ title, content }, user);
-    }
-  }
-}
-
 async function main() {
   await db.initialize();
   await resetDB();
@@ -117,12 +99,12 @@ async function main() {
     password: 'carbonpassword',
   });
 
-  const user2 = await UserService.create({
+  await UserService.create({
     email: 'carbon-tracker2@support.fr',
     password: 'carbonpassword',
   });
 
-  const user3 = await UserService.create({
+  await UserService.create({
     email: 'carbon-tracker3@support.fr',
     password: 'carbonpassword',
   });
@@ -135,8 +117,6 @@ async function main() {
   const categories = [category1, category2, category3, category4];
 
   await createActivities(user1, categories);
-
-  await createPosts([user1, user2, user3]);
 
   await db.destroy();
   console.info('♻️ Database successfully reset!');

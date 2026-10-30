@@ -11,8 +11,6 @@ export default class UserWithoutPassword
       | 'password'
       | 'donations'
       | 'activityEntries'
-      | 'posts'
-      | 'likedPosts'
       | 'hasId'
       | 'save'
       | 'remove'
