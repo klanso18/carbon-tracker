@@ -5,7 +5,6 @@ import Cookies from 'cookies';
 import { SignJWT } from 'jose';
 import { GraphQLError } from 'graphql';
 import { validate } from 'class-validator';
-import { db } from '../../db';
 import User from '../../entities/user/user';
 import InputRegister from '../../entities/user/input-register';
 import UserWithoutPassword from '../../entities/user/user-without-password';
@@ -16,13 +15,6 @@ import UserService from '../../services/user-service';
 
 @Resolver(User)
 export default class UserResolver {
-  @Authorized()
-  @Query(() => [User])
-  async users() {
-    const userRepository = db.getRepository(User);
-    return userRepository.find();
-  }
-
   @Query(() => Message)
   async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await UserService.readByMail(infos.email);
@@ -70,6 +62,9 @@ export default class UserResolver {
 
   @Mutation(() => UserWithoutPassword)
   async register(@Arg('infos') infos: InputRegister) {
+    UserService.assertValidEmail(infos.email);
+    UserService.assertValidPassword(infos.password);
+
     const existingUser = await UserService.readByMail(infos.email);
 
     if (existingUser) {
@@ -104,7 +99,12 @@ export default class UserResolver {
       throw new Error('User not found.');
     }
 
-    const data = { picture, name };
+    const trimmedName = name?.trim();
+    if (trimmedName !== undefined) {
+      UserService.assertValidName(trimmedName);
+    }
+
+    const data = { picture, name: trimmedName };
 
     Object.assign(userToUpdate, data);
     const errors = await validate(userToUpdate);
@@ -137,16 +137,9 @@ export default class UserResolver {
 
     const validOldPassword = await argon2.verify(user.password, oldPassword);
     if (!validOldPassword) {
-      throw new Error('Ancien mot de passe incorrecte.');
+      throw new Error('Ancien mot de passe incorrect.');
     }
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
-
-    if (!passwordRegex.test(newPassword)) {
-      throw new Error(
-        'Le mot de passe doit contenir au moins huit caractères, au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.',
-      );
-    }
+    UserService.assertValidPassword(newPassword);
 
     user.password = await argon2.hash(newPassword);
     await user.save();
@@ -174,7 +167,7 @@ export default class UserResolver {
 
     const validPassword = await argon2.verify(user.password, password);
     if (!validPassword) {
-      throw new Error('Password is incorrect.');
+      throw new Error('Mot de passe incorrect.');
     }
 
     await User.remove(user);

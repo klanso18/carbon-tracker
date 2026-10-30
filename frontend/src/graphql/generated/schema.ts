@@ -156,7 +156,6 @@ export type Query = {
   login: Message;
   logout: Message;
   tags: Array<Book>;
-  users: Array<User>;
 };
 
 
