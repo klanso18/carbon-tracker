@@ -6,12 +6,15 @@ import {
   useUpdateUserMutation,
   useChangePasswordMutation,
   useDeleteUserMutation,
+  useGetProfileQuery,
 } from '@/graphql/generated/schema';
-import Button from '@/components/commons/buttons/Button';
 import GenericFormModal from '@/components/modal/GenericFormModal';
 import Typography from '@/components/commons/typography/Typography';
+import ProfileHeader from '@/components/profile/ProfileHeader';
+import AccountSettings from '@/components/profile/AccountSettings';
+import MyDonations from '@/components/profile/MyDonations';
+import AccountData from '@/components/profile/AccountData';
 import uploadImage, {
-  ACCEPTED_IMAGE_TYPES,
   MAX_UPLOAD_SIZE,
   getUploadErrorMessage,
 } from '@/uploadImage';
@@ -24,6 +27,10 @@ const getErrorMessage = (err: unknown) =>
 export default function Profile() {
   const { user, setUser } = useUser();
   const { showAlert } = useAlert();
+  // Statistics change on other pages: the cache alone would show stale figures
+  const { data: profile } = useGetProfileQuery({
+    fetchPolicy: 'cache-and-network',
+  });
   // One modal at a time, so that its error and fields can never leak into another
   const [activeModal, setActiveModal] = useState<ModalName | null>(null);
   const [modalError, setModalError] = useState<string | null>(null);
@@ -131,88 +138,28 @@ export default function Profile() {
 
   return (
     <Layout title='Profile' themed>
-      <div className='w-full flex flex-col p-10 pb-0 max-[1710px]:p-2'>
-        <div className='h-[15vh] max-h-[128px] flex justify-between items-center mb-2 px-7'>
-          <Typography customClass='pageTitle'>Mon profil</Typography>
+      <div className='w-full flex flex-col gap-6 p-10 max-[1710px]:p-3'>
+        <Typography as='h1' customClass='pageTitle' className='px-7 pt-4'>
+          Mon profil
+        </Typography>
+        <ProfileHeader
+          name={user?.name}
+          email={user?.email}
+          picture={user?.picture}
+          memberSince={profile?.me.createdAt}
+          stats={profile?.getProfileStats}
+          onPictureChange={handleFileChange}
+        />
+        <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
+          <AccountSettings
+            name={user?.name}
+            email={user?.email}
+            onEditName={() => openModal('name')}
+            onEditPassword={() => openModal('password')}
+          />
+          <MyDonations donations={profile?.getMyDonations} />
         </div>
-        <div className='flex flex-row'>
-          <div className='glassCard shadow-2xl p-7 w-full'>
-            <div className='flex justify-center'>
-              <div className='relative inline-block'>
-                <img
-                  src={user?.picture || '/icons/avatar.svg'}
-                  alt='profile picture'
-                  className='object-cover w-40 h-40 rounded-full mb-5 ring-2 ring-white/40'
-                />
-                <input
-                  type='file'
-                  id='file-input'
-                  accept={ACCEPTED_IMAGE_TYPES}
-                  className='hidden'
-                  onChange={handleFileChange}
-                />
-                <label
-                  htmlFor='file-input'
-                  className='absolute bottom-0 right-0 bg-medium_green rounded-full p-2 cursor-pointer shadow-md transition-colors duration-300 hover:bg-light_green'
-                >
-                  <img
-                    src='/icons/modify.png'
-                    alt='Edit icon'
-                    className='w-6 h-6'
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className='text-center flex flex-col items-center'>
-              {user?.name ? (
-                <>
-                  <p className='mt-3 font-poppins text-xl font-semibold pb-2 text-white'>
-                    {user.name}
-                  </p>
-                  <Button
-                    variant='outline'
-                    size='lg'
-                    onClick={() => openModal('name')}
-                    className='mt-2 w-1/3'
-                  >
-                    Modifier le nom
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <p className='font-poppins font-light'>
-                    Veuillez saisir votre Nom
-                  </p>
-                  <Button
-                    variant='outline'
-                    size='lg'
-                    onClick={() => openModal('name')}
-                    className='mt-2 w-1/3'
-                  >
-                    Ajouter un nom
-                  </Button>
-                </>
-              )}
-              <Button
-                variant='outline'
-                size='lg'
-                onClick={() => openModal('password')}
-                className='mt-2 w-1/3'
-              >
-                Modifier mon mot de passe
-              </Button>
-              <Button
-                variant='outline'
-                size='lg'
-                onClick={() => openModal('delete')}
-                className='mt-2 w-1/3 !border-red-400 !text-red-300 hover:!bg-red-500/10'
-              >
-                Supprimer mon compte
-              </Button>
-            </div>
-          </div>
-        </div>
+        <AccountData onDeleteAccount={() => openModal('delete')} />
       </div>
 
       {activeModal === 'name' && (
@@ -220,9 +167,17 @@ export default function Profile() {
           onClose={closeModal}
           onSubmit={handleNameUpdate}
           title='Modifier le nom'
+          size='md'
         >
+          <label
+            htmlFor='name'
+            className='block pb-2 text-sm font-medium text-white'
+          >
+            Nom
+          </label>
           <input
             type='text'
+            id='name'
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             className='glassInput'
@@ -235,6 +190,7 @@ export default function Profile() {
           onClose={closeModal}
           onSubmit={handleChangePassword}
           title='Changer mon mot de passe'
+          size='md'
         >
           <label
             htmlFor='oldPassword'
@@ -262,6 +218,10 @@ export default function Profile() {
             onChange={(e) => setNewPassword(e.target.value)}
             className='glassInput'
           />
+          <p className='mt-2 text-sm text-white/70'>
+            8 caractères minimum, avec une majuscule, une minuscule, un chiffre
+            et un caractère spécial.
+          </p>
           {modalError && <p className='mt-2 text-red-300'>{modalError}</p>}
         </GenericFormModal>
       )}
@@ -271,6 +231,7 @@ export default function Profile() {
           onSubmit={handleDeleteAccount}
           title='Supprimer mon compte'
           submitLabel='Supprimer mon compte'
+          size='md'
         >
           <label
             htmlFor='deletePassword'
