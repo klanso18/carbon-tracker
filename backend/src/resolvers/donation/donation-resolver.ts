@@ -5,6 +5,7 @@ import {
   Int,
   Query,
   Ctx,
+  Authorized,
   FieldResolver,
   Root,
 } from 'type-graphql';
@@ -12,6 +13,8 @@ import Donation from '../../entities/donation/donation';
 import UserService from '../../services/user-service';
 import { db } from '../../db';
 import { MyContext } from '../..';
+
+const MY_DONATIONS_LIMIT = 5;
 
 @Resolver(Donation)
 export default class DonationResolver {
@@ -55,6 +58,19 @@ export default class DonationResolver {
       .select('SUM(donation.amount)', 'total')
       .getRawOne();
     return total.total;
+  }
+
+  @Authorized()
+  @Query(() => [Donation])
+  async getMyDonations(@Ctx() ctx: MyContext): Promise<Donation[]> {
+    if (!ctx.user) {
+      throw new Error('You must be authenticated to access your donations.');
+    }
+    return Donation.find({
+      where: { user: { id: ctx.user.id } },
+      order: { createdAt: 'DESC' },
+      take: MY_DONATIONS_LIMIT,
+    });
   }
 
   @Query(() => [Donation])

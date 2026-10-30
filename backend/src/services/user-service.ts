@@ -2,6 +2,9 @@ import { isEmail } from 'class-validator';
 import { db } from '../db';
 import InputRegister from '../entities/user/input-register';
 import User from '../entities/user/user';
+import ProfileStats from '../entities/user/profile-stats';
+import ActivityEntry from '../entities/activity-entry/activity-entry';
+import Donation from '../entities/donation/donation';
 
 // Same rule as frontend/src/pages/auth/signup.tsx: any non-alphanumeric
 // character counts as special.
@@ -42,6 +45,30 @@ export default class UserService {
     const userRepository = db.getRepository(User);
     const user = await userRepository.findOne({ where: { id } });
     return user;
+  }
+
+  static async getProfileStats(userId: string): Promise<ProfileStats> {
+    const activities = await db
+      .getRepository(ActivityEntry)
+      .createQueryBuilder('activityEntry')
+      .select('COALESCE(SUM(activityEntry.input), 0)', 'totalKgCO2')
+      .addSelect('COUNT(*)', 'activityCount')
+      .where('activityEntry.userId = :userId', { userId })
+      .getRawOne();
+
+    const donations = await db
+      .getRepository(Donation)
+      .createQueryBuilder('donation')
+      .select('COALESCE(SUM(donation.amount), 0)', 'totalDonated')
+      .where('donation.userId = :userId', { userId })
+      .getRawOne();
+
+    // PostgreSQL returns COUNT and SUM of integers as strings
+    return {
+      totalKgCO2: Number(activities.totalKgCO2),
+      activityCount: Number(activities.activityCount),
+      totalDonated: Number(donations.totalDonated),
+    };
   }
 
   static async create(infos: InputRegister): Promise<User> {

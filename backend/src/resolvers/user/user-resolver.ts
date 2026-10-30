@@ -8,6 +8,7 @@ import { validate } from 'class-validator';
 import User from '../../entities/user/user';
 import InputRegister from '../../entities/user/input-register';
 import UserWithoutPassword from '../../entities/user/user-without-password';
+import ProfileStats from '../../entities/user/profile-stats';
 import Message from '../../entities/user/message';
 import InputLogin from '../../entities/user/input-login';
 import { MyContext } from '../..';
@@ -15,6 +16,24 @@ import UserService from '../../services/user-service';
 
 @Resolver(User)
 export default class UserResolver {
+  @Authorized()
+  @Query(() => User)
+  me(@Ctx() ctx: MyContext): User {
+    if (!ctx.user) {
+      throw new Error('You must be authenticated to access your profile.');
+    }
+    return ctx.user;
+  }
+
+  @Authorized()
+  @Query(() => ProfileStats)
+  async getProfileStats(@Ctx() ctx: MyContext): Promise<ProfileStats> {
+    if (!ctx.user) {
+      throw new Error('You must be authenticated to access your statistics.');
+    }
+    return UserService.getProfileStats(ctx.user.id);
+  }
+
   @Query(() => Message)
   async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await UserService.readByMail(infos.email);

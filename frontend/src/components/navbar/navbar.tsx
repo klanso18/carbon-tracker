@@ -113,7 +113,12 @@ export default function navbar() {
                     alt='profil picture'
                   />
                 </div>
-                <Typography variant='paragraph'>{user?.name ?? ''}</Typography>
+                <Typography
+                  variant='paragraph'
+                  className='max-w-[5rem] truncate'
+                >
+                  {user?.name ?? ''}
+                </Typography>
               </label>
             </Link>
           </div>
