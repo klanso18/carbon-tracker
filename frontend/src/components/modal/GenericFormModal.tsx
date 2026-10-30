@@ -7,6 +7,7 @@ interface GenericModalProps {
   onClose: () => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
+  submitLabel?: string;
 }
 
 const GenericModal: React.FC<GenericModalProps> = ({
@@ -14,6 +15,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
   onClose,
   onSubmit,
   children,
+  submitLabel = 'Enregistrer',
 }) => {
   return (
     <div className='modal-box glassPanel w-11/12 max-w-5xl absolute z-50 top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-3xl p-8'>
@@ -37,7 +39,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
             type='submit'
             data-testid='submit'
           >
-            Enregistrer
+            {submitLabel}
           </Button>
         </div>
       </form>

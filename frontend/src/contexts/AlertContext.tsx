@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import clsx from 'clsx';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -40,11 +39,11 @@ export default function AlertProvider({ children }: AlertProviderProps) {
   const getTitle = (type: 'success' | 'warn' | 'error') => {
     switch (type) {
       case 'success':
-        return 'Success';
+        return 'Succès';
       case 'warn':
-        return 'Warning';
+        return 'Attention';
       case 'error':
-        return 'Error';
+        return 'Erreur';
       default:
         return '';
     }
@@ -54,16 +53,7 @@ export default function AlertProvider({ children }: AlertProviderProps) {
     <AlertContext.Provider value={{ showAlert }}>
       {children}
       {alert && (
-        <div
-          className={clsx(
-            'fixed bottom-6 right-6 p-4 w-[300px] rounded shadow-md',
-            {
-              'bg-green-50 text-green-800': alert.type === 'success',
-              'bg-yellow-50': alert.type === 'warn',
-              'bg-red-50': alert.type === 'error',
-            },
-          )}
-        >
+        <div className='glassPanel fixed bottom-6 right-6 z-50 p-4 w-[300px] max-w-[calc(100vw-3rem)] rounded-2xl'>
           <div className='flex'>
             <div className='flex-shrink-0'>
               {alert.type === 'success' && (
