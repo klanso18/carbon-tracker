@@ -46,12 +46,6 @@ export default function navbar() {
       imgHover: '/icons/co2-icon-hover.png',
     },
     {
-      name: 'posts',
-      link: '/posts/list',
-      img: '/icons/write-icon.png',
-      imgHover: '/icons/write-icon-hover.png',
-    },
-    {
       name: 'donations',
       link: '/donation',
       img: '/icons/donation-icon.png',

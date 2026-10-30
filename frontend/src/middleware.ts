@@ -50,6 +50,5 @@ export const config = {
     '/activity-entries/:path*',
     '/donation/:path*',
     '/profile',
-    '/posts/:path*',
   ],
 };

@@ -4,7 +4,6 @@ import User from './entities/user/user';
 import ActivityEntry from './entities/activity-entry/activity-entry';
 import Category from './entities/category/category';
 import Donation from './entities/donation/donation';
-import Post from './entities/post/post';
 
 // export default new DataSource({
 //   type: 'postgres',
@@ -13,7 +12,7 @@ import Post from './entities/post/post';
 //   username: process.env.DB_USER || 'postgres',
 //   password: process.env.DB_PASS || 'postgres',
 //   database: process.env.DB_NAME || 'postgres',
-//   entities: [Book, User, ActivityEntry, Category, Donation, Post],
+//   entities: [Book, User, ActivityEntry, Category, Donation],
 //   synchronize: true,
 //   logging: true,
 // });
@@ -25,7 +24,7 @@ export const db = new DataSource({
   username: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASS || 'postgres',
   database: process.env.DB_NAME || 'postgres',
-  entities: [Book, User, ActivityEntry, Category, Donation, Post],
+  entities: [Book, User, ActivityEntry, Category, Donation],
   synchronize: true,
   logging: true,
 });
