@@ -9,6 +9,8 @@ export default async function uploadImage(file: File) {
     }>(
       (process.env.NEXT_PUBLIC_UPLOAD_API_ENDPOINT as string) || '/uploads',
       form,
+      // The upload service authenticates with the session cookie
+      { withCredentials: true },
     )
     .catch(console.error);
 }

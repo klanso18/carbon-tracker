@@ -2,6 +2,13 @@ import { writeFile } from 'node:fs/promises';
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
 import { cors } from 'hono/cors';
+import { jwt } from 'hono/jwt';
+
+// Fail fast, like the backend: the same key signs the session cookie.
+const { SECRET_KEY } = process.env;
+if (!SECRET_KEY) {
+  throw new Error('SECRET_KEY environment variable is required');
+}
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -25,7 +32,16 @@ function detectImageExtension(bytes: Uint8Array): string | null {
 
 const app = new Hono();
 
-app.use('/*', cors());
+// Credentials cannot be sent with a wildcard origin, so the origins are explicit.
+app.use(
+  '/*',
+  cors({
+    origin: process.env.CORS_ALLOWED_ORIGINS?.split(',') ?? [
+      'http://localhost:3000',
+    ],
+    credentials: true,
+  }),
+);
 
 app.get('/', (c) =>
   c.html(
@@ -36,30 +52,34 @@ app.get('/', (c) =>
 
 app.use('/files/*', serveStatic({ root: '.' }));
 
-app.post('/uploads', async (c) => {
-  const { file } = await c.req.parseBody();
-  if (!file || typeof file === 'string') {
-    return c.json({ error: 'Missing file' }, 400);
-  }
+app.post(
+  '/uploads',
+  jwt({ secret: SECRET_KEY, cookie: 'token' }),
+  async (c) => {
+    const { file } = await c.req.parseBody();
+    if (!file || typeof file === 'string') {
+      return c.json({ error: 'Missing file' }, 400);
+    }
 
-  if (file.size > MAX_FILE_SIZE) {
-    return c.json({ error: 'File too large' }, 413);
-  }
+    if (file.size > MAX_FILE_SIZE) {
+      return c.json({ error: 'File too large' }, 413);
+    }
 
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const extension = detectImageExtension(bytes);
-  if (!extension) {
-    return c.json({ error: 'Unsupported file type' }, 415);
-  }
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const extension = detectImageExtension(bytes);
+    if (!extension) {
+      return c.json({ error: 'Unsupported file type' }, 415);
+    }
 
-  // The name and extension never come from the client: a crafted file.name
-  // could escape files/, and the extension decides the type served back.
-  const path = `files/${crypto.randomUUID()}.${extension}`;
-  // Not Bun.write: under Bun 1.0.14 it kills the process on real-sized files.
-  await writeFile(path, bytes);
+    // The name and extension never come from the client: a crafted file.name
+    // could escape files/, and the extension decides the type served back.
+    const path = `files/${crypto.randomUUID()}.${extension}`;
+    // Not Bun.write: under Bun 1.0.14 it kills the process on real-sized files.
+    await writeFile(path, bytes);
 
-  return c.json({ path, url: c.req.url.replace('uploads', path) });
-});
+    return c.json({ path, url: c.req.url.replace('uploads', path) });
+  },
+);
 
 console.log('server ready');
 

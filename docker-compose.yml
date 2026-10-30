@@ -24,6 +24,8 @@ services:
 
   file-upload-service: 
     build: file-upload-service
+    env_file:
+      - frontend/.env
     ports:
       - 8000:8000
     volumes:
