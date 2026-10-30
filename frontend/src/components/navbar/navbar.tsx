@@ -109,7 +109,7 @@ export default function navbar() {
               >
                 <div className='w-12 rounded-full'>
                   <img
-                    src={user?.picture ?? '/icons/avatar.svg'}
+                    src={user?.picture || '/icons/avatar.svg'}
                     alt='profil picture'
                   />
                 </div>

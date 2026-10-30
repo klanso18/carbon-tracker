@@ -28,7 +28,11 @@ export default class Donation extends BaseEntity {
   @Field(() => Boolean)
   isAnonymous: boolean;
 
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.donations)
-  user: User;
+  // Not exposed in GraphQL: donations are public, see donorName in the resolver.
+  // Null once the donor deleted their account: the pot keeps the amount.
+  @ManyToOne(() => User, (user) => user.donations, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  user: User | null;
 }

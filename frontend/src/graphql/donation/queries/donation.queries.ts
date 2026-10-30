@@ -13,10 +13,7 @@ export const GET_LAST_DONATIONS = gql`
       createdAt
       id
       isAnonymous
-      user {
-        email
-        name
-      }
+      donorName
     }
   }
 `;

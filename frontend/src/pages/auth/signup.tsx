@@ -22,8 +22,9 @@ export default function Signup() {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+  // Same rule as backend/src/services/user-service.ts
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
