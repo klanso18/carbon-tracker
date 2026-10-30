@@ -41,8 +41,9 @@ export default class User extends BaseEntity {
   @Column({
     unique: true,
     transformer: {
-      from(value: string) {
-        return value.toLowerCase();
+      // Null when a left join finds no user, e.g. a donation of a deleted account
+      from(value: string | null) {
+        return value?.toLowerCase();
       },
       to(value: string) {
         return value.toLowerCase();

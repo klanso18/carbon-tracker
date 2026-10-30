@@ -1,8 +1,4 @@
-import {
-  //   Donation,
-  GetLastDonationsQuery,
-  GetPotQuery,
-} from '@/graphql/generated/schema';
+import { GetLastDonationsQuery, GetPotQuery } from '@/graphql/generated/schema';
 import Typography from '../commons/typography/Typography';
 
 type DonationSummaryProps = {
@@ -12,18 +8,7 @@ type DonationSummaryProps = {
   isLastDonationsLoading: boolean;
 };
 
-type DonationUser = {
-  email: string;
-  name?: string | null | undefined;
-};
-
-type Donation = {
-  amount: number;
-  createdAt?: Date;
-  id: number;
-  isAnonymous: boolean;
-  user: DonationUser;
-};
+type Donation = GetLastDonationsQuery['getLastDonations'][number];
 
 export default function DonationSummary({
   pot,
@@ -35,10 +20,7 @@ export default function DonationSummary({
     if (donation.isAnonymous) {
       return 'Anonymous';
     }
-    if (donation.user && donation.user.name) {
-      return donation.user.name;
-    }
-    return 'Unknown';
+    return donation.donorName ?? 'Unknown';
   };
 
   // replace by loader component

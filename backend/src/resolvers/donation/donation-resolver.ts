@@ -1,4 +1,13 @@
-import { Resolver, Mutation, Arg, Int, Query, Ctx } from 'type-graphql';
+import {
+  Resolver,
+  Mutation,
+  Arg,
+  Int,
+  Query,
+  Ctx,
+  FieldResolver,
+  Root,
+} from 'type-graphql';
 import Donation from '../../entities/donation/donation';
 import UserService from '../../services/user-service';
 import { db } from '../../db';
@@ -6,6 +15,12 @@ import { MyContext } from '../..';
 
 @Resolver(Donation)
 export default class DonationResolver {
+  @FieldResolver(() => String, { nullable: true })
+  donorName(@Root() donation: Donation): string | null {
+    if (donation.isAnonymous) return null;
+    return donation.user?.name ?? null;
+  }
+
   @Mutation(() => Donation)
   async createDonation(
     @Ctx() ctx: MyContext,

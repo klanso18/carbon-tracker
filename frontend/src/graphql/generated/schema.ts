@@ -47,9 +47,9 @@ export type Donation = {
   __typename?: 'Donation';
   amount: Scalars['Float'];
   createdAt: Scalars['DateTimeISO'];
+  donorName?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   isAnonymous: Scalars['Boolean'];
-  user: User;
 };
 
 export type InputCreate = {
@@ -298,7 +298,7 @@ export type GetPotQuery = { __typename?: 'Query', getPot: number };
 export type GetLastDonationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetLastDonationsQuery = { __typename?: 'Query', getLastDonations: Array<{ __typename?: 'Donation', amount: number, createdAt: any, id: number, isAnonymous: boolean, user: { __typename?: 'User', email: string, name?: string | null } }> };
+export type GetLastDonationsQuery = { __typename?: 'Query', getLastDonations: Array<{ __typename?: 'Donation', amount: number, createdAt: any, id: number, isAnonymous: boolean, donorName?: string | null }> };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -704,10 +704,7 @@ export const GetLastDonationsDocument = gql`
     createdAt
     id
     isAnonymous
-    user {
-      email
-      name
-    }
+    donorName
   }
 }
     `;
