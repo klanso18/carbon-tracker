@@ -267,13 +267,6 @@ export type ActivityEntriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ActivityEntriesQuery = { __typename?: 'Query', activityEntries: Array<{ __typename?: 'ActivityEntry', id: number, name: string, input: number, createdAt: any, spendedAt: any, category: { __typename?: 'Category', id: number, name: string } }> };
 
-export type GetActivityEntryByIdQueryVariables = Exact<{
-  activityEntryId: Scalars['Int'];
-}>;
-
-
-export type GetActivityEntryByIdQuery = { __typename?: 'Query', getActivityEntryById: { __typename?: 'ActivityEntry', input: number, name: string, id: number, category: { __typename?: 'Category', id: number } } };
-
 export type FilteredActivityEntriesQueryVariables = Exact<{
   searchTerm?: InputMaybe<Scalars['String']>;
   categoryIds?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
@@ -514,46 +507,6 @@ export function useActivityEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ActivityEntriesQueryHookResult = ReturnType<typeof useActivityEntriesQuery>;
 export type ActivityEntriesLazyQueryHookResult = ReturnType<typeof useActivityEntriesLazyQuery>;
 export type ActivityEntriesQueryResult = Apollo.QueryResult<ActivityEntriesQuery, ActivityEntriesQueryVariables>;
-export const GetActivityEntryByIdDocument = gql`
-    query GetActivityEntryById($activityEntryId: Int!) {
-  getActivityEntryById(activityEntryId: $activityEntryId) {
-    category {
-      id
-    }
-    input
-    name
-    id
-  }
-}
-    `;
-
-/**
- * __useGetActivityEntryByIdQuery__
- *
- * To run a query within a React component, call `useGetActivityEntryByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetActivityEntryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetActivityEntryByIdQuery({
- *   variables: {
- *      activityEntryId: // value for 'activityEntryId'
- *   },
- * });
- */
-export function useGetActivityEntryByIdQuery(baseOptions: Apollo.QueryHookOptions<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>(GetActivityEntryByIdDocument, options);
-      }
-export function useGetActivityEntryByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>(GetActivityEntryByIdDocument, options);
-        }
-export type GetActivityEntryByIdQueryHookResult = ReturnType<typeof useGetActivityEntryByIdQuery>;
-export type GetActivityEntryByIdLazyQueryHookResult = ReturnType<typeof useGetActivityEntryByIdLazyQuery>;
-export type GetActivityEntryByIdQueryResult = Apollo.QueryResult<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>;
 export const FilteredActivityEntriesDocument = gql`
     query FilteredActivityEntries($searchTerm: String, $categoryIds: [Int!], $dateFrom: DateTimeISO, $dateTo: DateTimeISO, $skip: Int!, $take: Int!) {
   filteredActivityEntries(
