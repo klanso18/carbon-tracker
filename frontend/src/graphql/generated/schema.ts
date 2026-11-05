@@ -28,13 +28,6 @@ export type ActivityEntry = {
   user: User;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author: Scalars['String'];
-  id: Scalars['Int'];
-  title: Scalars['String'];
-};
-
 export type Category = {
   __typename?: 'Category';
   activityEntries: Array<ActivityEntry>;
@@ -164,7 +157,6 @@ export type Query = {
   login: Message;
   logout: Message;
   me: User;
-  tags: Array<Book>;
 };
 
 
@@ -191,11 +183,6 @@ export type QueryFilteredActivityEntriesArgs = {
 
 export type QueryLoginArgs = {
   infos: InputLogin;
-};
-
-
-export type QueryTagsArgs = {
-  title?: InputMaybe<Scalars['String']>;
 };
 
 export type SumByCategory = {
@@ -295,11 +282,6 @@ export type GetLastDonationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetLastDonationsQuery = { __typename?: 'Query', getLastDonations: Array<{ __typename?: 'Donation', amount: number, createdAt: any, id: number, isAnonymous: boolean, donorName?: string | null }> };
-
-export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetBooksQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Book', author: string, id: number, title: string }> };
 
 export type GetSumByCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -696,42 +678,6 @@ export function useGetLastDonationsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetLastDonationsQueryHookResult = ReturnType<typeof useGetLastDonationsQuery>;
 export type GetLastDonationsLazyQueryHookResult = ReturnType<typeof useGetLastDonationsLazyQuery>;
 export type GetLastDonationsQueryResult = Apollo.QueryResult<GetLastDonationsQuery, GetLastDonationsQueryVariables>;
-export const GetBooksDocument = gql`
-    query GetBooks {
-  tags {
-    author
-    id
-    title
-  }
-}
-    `;
-
-/**
- * __useGetBooksQuery__
- *
- * To run a query within a React component, call `useGetBooksQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBooksQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetBooksQuery(baseOptions?: Apollo.QueryHookOptions<GetBooksQuery, GetBooksQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, options);
-      }
-export function useGetBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBooksQuery, GetBooksQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, options);
-        }
-export type GetBooksQueryHookResult = ReturnType<typeof useGetBooksQuery>;
-export type GetBooksLazyQueryHookResult = ReturnType<typeof useGetBooksLazyQuery>;
-export type GetBooksQueryResult = Apollo.QueryResult<GetBooksQuery, GetBooksQueryVariables>;
 export const GetSumByCategoryDocument = gql`
     query GetSumByCategory {
   getSumByCategory {
