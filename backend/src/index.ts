@@ -8,7 +8,6 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { buildSchema } from 'type-graphql';
 import { db } from './db';
-import BookResolver from './resolvers/bookResolver';
 import UserResolver from './resolvers/user/user-resolver';
 import User from './entities/user/user';
 import customAuthChecker, { verifyToken } from './lib/auth-checker';
@@ -37,7 +36,6 @@ async function main() {
 
   const schema = await buildSchema({
     resolvers: [
-      BookResolver,
       UserResolver,
       CategoryResolver,
       ActivityEntryResolver,

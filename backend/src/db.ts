@@ -1,21 +1,8 @@
 import { DataSource } from 'typeorm';
-import Book from './entities/book';
 import User from './entities/user/user';
 import ActivityEntry from './entities/activity-entry/activity-entry';
 import Category from './entities/category/category';
 import Donation from './entities/donation/donation';
-
-// export default new DataSource({
-//   type: 'postgres',
-//   host: process.env.DB_HOST || 'localhost',
-//   port: parseInt(process.env.DB_PORT || '0', 10) || 5432,
-//   username: process.env.DB_USER || 'postgres',
-//   password: process.env.DB_PASS || 'postgres',
-//   database: process.env.DB_NAME || 'postgres',
-//   entities: [Book, User, ActivityEntry, Category, Donation],
-//   synchronize: true,
-//   logging: true,
-// });
 
 export const db = new DataSource({
   type: 'postgres',
@@ -24,7 +11,7 @@ export const db = new DataSource({
   username: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASS || 'postgres',
   database: process.env.DB_NAME || 'postgres',
-  entities: [Book, User, ActivityEntry, Category, Donation],
+  entities: [User, ActivityEntry, Category, Donation],
   synchronize: true,
   logging: true,
 });
