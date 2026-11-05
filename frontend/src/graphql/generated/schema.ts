@@ -155,7 +155,6 @@ export type Query = {
   activityEntries: Array<ActivityEntry>;
   categories: Array<Category>;
   filteredActivityEntries: Array<ActivityEntry>;
-  getActivityEntryById: ActivityEntry;
   getLastDonations: Array<Donation>;
   getMyDonations: Array<Donation>;
   getPot: Scalars['Int'];
@@ -187,11 +186,6 @@ export type QueryFilteredActivityEntriesArgs = {
   searchTerm?: InputMaybe<Scalars['String']>;
   skip?: Scalars['Int'];
   take?: Scalars['Int'];
-};
-
-
-export type QueryGetActivityEntryByIdArgs = {
-  activityEntryId: Scalars['Int'];
 };
 
 
