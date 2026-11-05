@@ -1,4 +1,5 @@
 import React, { FormEvent, ReactNode } from 'react';
+import clsx from 'clsx';
 import Typography from '@/components/commons/typography/Typography';
 import Button from '@/components/commons/buttons/Button';
 
@@ -8,6 +9,8 @@ interface GenericModalProps {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
   submitLabel?: string;
+  // md: short forms of one or two fields
+  size?: 'md' | 'lg';
 }
 
 const GenericModal: React.FC<GenericModalProps> = ({
@@ -16,9 +19,16 @@ const GenericModal: React.FC<GenericModalProps> = ({
   onSubmit,
   children,
   submitLabel = 'Enregistrer',
+  size = 'lg',
 }) => {
   return (
-    <div className='modal-box glassPanel w-11/12 max-w-5xl absolute z-50 top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-3xl p-8'>
+    <div
+      className={clsx(
+        'modal-box glassPanel w-11/12',
+        size === 'md' ? 'max-w-md' : 'max-w-5xl',
+        'absolute z-50 top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-3xl p-8',
+      )}
+    >
       <Typography customClass='text-xl font-semibold pb-2 text-white'>
         {title}
       </Typography>

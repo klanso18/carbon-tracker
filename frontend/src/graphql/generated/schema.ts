@@ -143,6 +143,13 @@ export type ObjectId = {
   id: Scalars['Int'];
 };
 
+export type ProfileStats = {
+  __typename?: 'ProfileStats';
+  activityCount: Scalars['Int'];
+  totalDonated: Scalars['Int'];
+  totalKgCO2: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   activityEntries: Array<ActivityEntry>;
@@ -150,11 +157,14 @@ export type Query = {
   filteredActivityEntries: Array<ActivityEntry>;
   getActivityEntryById: ActivityEntry;
   getLastDonations: Array<Donation>;
+  getMyDonations: Array<Donation>;
   getPot: Scalars['Int'];
+  getProfileStats: ProfileStats;
   getSumByCategory: Array<SumByCategory>;
   getSumByMonth: Array<SumByMonth>;
   login: Message;
   logout: Message;
+  me: User;
   tags: Array<Book>;
 };
 
@@ -355,6 +365,11 @@ export type LogoutQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutQuery = { __typename?: 'Query', logout: { __typename?: 'Message', message: string, success: boolean } };
+
+export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, name?: string | null, email: string, picture?: string | null, createdAt?: any | null }, getProfileStats: { __typename?: 'ProfileStats', totalKgCO2: number, activityCount: number, totalDonated: number }, getMyDonations: Array<{ __typename?: 'Donation', id: number, amount: number, createdAt: any, isAnonymous: boolean }> };
 
 
 export const CreateActivityEntryDocument = gql`
@@ -1054,3 +1069,52 @@ export function useLogoutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Log
 export type LogoutQueryHookResult = ReturnType<typeof useLogoutQuery>;
 export type LogoutLazyQueryHookResult = ReturnType<typeof useLogoutLazyQuery>;
 export type LogoutQueryResult = Apollo.QueryResult<LogoutQuery, LogoutQueryVariables>;
+export const GetProfileDocument = gql`
+    query GetProfile {
+  me {
+    id
+    name
+    email
+    picture
+    createdAt
+  }
+  getProfileStats {
+    totalKgCO2
+    activityCount
+    totalDonated
+  }
+  getMyDonations {
+    id
+    amount
+    createdAt
+    isAnonymous
+  }
+}
+    `;
+
+/**
+ * __useGetProfileQuery__
+ *
+ * To run a query within a React component, call `useGetProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+      }
+export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+        }
+export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
+export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
+export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
