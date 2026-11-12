@@ -28,13 +28,6 @@ export type ActivityEntry = {
   user: User;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author: Scalars['String'];
-  id: Scalars['Int'];
-  title: Scalars['String'];
-};
-
 export type Category = {
   __typename?: 'Category';
   activityEntries: Array<ActivityEntry>;
@@ -155,7 +148,6 @@ export type Query = {
   activityEntries: Array<ActivityEntry>;
   categories: Array<Category>;
   filteredActivityEntries: Array<ActivityEntry>;
-  getActivityEntryById: ActivityEntry;
   getLastDonations: Array<Donation>;
   getMyDonations: Array<Donation>;
   getPot: Scalars['Int'];
@@ -165,7 +157,6 @@ export type Query = {
   login: Message;
   logout: Message;
   me: User;
-  tags: Array<Book>;
 };
 
 
@@ -190,18 +181,8 @@ export type QueryFilteredActivityEntriesArgs = {
 };
 
 
-export type QueryGetActivityEntryByIdArgs = {
-  activityEntryId: Scalars['Int'];
-};
-
-
 export type QueryLoginArgs = {
   infos: InputLogin;
-};
-
-
-export type QueryTagsArgs = {
-  title?: InputMaybe<Scalars['String']>;
 };
 
 export type SumByCategory = {
@@ -267,13 +248,6 @@ export type ActivityEntriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ActivityEntriesQuery = { __typename?: 'Query', activityEntries: Array<{ __typename?: 'ActivityEntry', id: number, name: string, input: number, createdAt: any, spendedAt: any, category: { __typename?: 'Category', id: number, name: string } }> };
 
-export type GetActivityEntryByIdQueryVariables = Exact<{
-  activityEntryId: Scalars['Int'];
-}>;
-
-
-export type GetActivityEntryByIdQuery = { __typename?: 'Query', getActivityEntryById: { __typename?: 'ActivityEntry', input: number, name: string, id: number, category: { __typename?: 'Category', id: number } } };
-
 export type FilteredActivityEntriesQueryVariables = Exact<{
   searchTerm?: InputMaybe<Scalars['String']>;
   categoryIds?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
@@ -308,11 +282,6 @@ export type GetLastDonationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetLastDonationsQuery = { __typename?: 'Query', getLastDonations: Array<{ __typename?: 'Donation', amount: number, createdAt: any, id: number, isAnonymous: boolean, donorName?: string | null }> };
-
-export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetBooksQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Book', author: string, id: number, title: string }> };
 
 export type GetSumByCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -514,46 +483,6 @@ export function useActivityEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ActivityEntriesQueryHookResult = ReturnType<typeof useActivityEntriesQuery>;
 export type ActivityEntriesLazyQueryHookResult = ReturnType<typeof useActivityEntriesLazyQuery>;
 export type ActivityEntriesQueryResult = Apollo.QueryResult<ActivityEntriesQuery, ActivityEntriesQueryVariables>;
-export const GetActivityEntryByIdDocument = gql`
-    query GetActivityEntryById($activityEntryId: Int!) {
-  getActivityEntryById(activityEntryId: $activityEntryId) {
-    category {
-      id
-    }
-    input
-    name
-    id
-  }
-}
-    `;
-
-/**
- * __useGetActivityEntryByIdQuery__
- *
- * To run a query within a React component, call `useGetActivityEntryByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetActivityEntryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetActivityEntryByIdQuery({
- *   variables: {
- *      activityEntryId: // value for 'activityEntryId'
- *   },
- * });
- */
-export function useGetActivityEntryByIdQuery(baseOptions: Apollo.QueryHookOptions<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>(GetActivityEntryByIdDocument, options);
-      }
-export function useGetActivityEntryByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>(GetActivityEntryByIdDocument, options);
-        }
-export type GetActivityEntryByIdQueryHookResult = ReturnType<typeof useGetActivityEntryByIdQuery>;
-export type GetActivityEntryByIdLazyQueryHookResult = ReturnType<typeof useGetActivityEntryByIdLazyQuery>;
-export type GetActivityEntryByIdQueryResult = Apollo.QueryResult<GetActivityEntryByIdQuery, GetActivityEntryByIdQueryVariables>;
 export const FilteredActivityEntriesDocument = gql`
     query FilteredActivityEntries($searchTerm: String, $categoryIds: [Int!], $dateFrom: DateTimeISO, $dateTo: DateTimeISO, $skip: Int!, $take: Int!) {
   filteredActivityEntries(
@@ -749,42 +678,6 @@ export function useGetLastDonationsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetLastDonationsQueryHookResult = ReturnType<typeof useGetLastDonationsQuery>;
 export type GetLastDonationsLazyQueryHookResult = ReturnType<typeof useGetLastDonationsLazyQuery>;
 export type GetLastDonationsQueryResult = Apollo.QueryResult<GetLastDonationsQuery, GetLastDonationsQueryVariables>;
-export const GetBooksDocument = gql`
-    query GetBooks {
-  tags {
-    author
-    id
-    title
-  }
-}
-    `;
-
-/**
- * __useGetBooksQuery__
- *
- * To run a query within a React component, call `useGetBooksQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBooksQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetBooksQuery(baseOptions?: Apollo.QueryHookOptions<GetBooksQuery, GetBooksQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, options);
-      }
-export function useGetBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBooksQuery, GetBooksQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBooksQuery, GetBooksQueryVariables>(GetBooksDocument, options);
-        }
-export type GetBooksQueryHookResult = ReturnType<typeof useGetBooksQuery>;
-export type GetBooksLazyQueryHookResult = ReturnType<typeof useGetBooksLazyQuery>;
-export type GetBooksQueryResult = Apollo.QueryResult<GetBooksQuery, GetBooksQueryVariables>;
 export const GetSumByCategoryDocument = gql`
     query GetSumByCategory {
   getSumByCategory {

@@ -164,23 +164,6 @@ export default class ActivityEntryResolver {
   }
 
   @Authorized()
-  @Query(() => ActivityEntry)
-  async getActivityEntryById(
-    @Ctx() ctx: MyContext,
-    @Arg('activityEntryId', () => Int) id: number,
-  ) {
-    if (!ctx.user) {
-      throw new Error('You must be authenticated to access activities.');
-    }
-    const activityEntry = await ActivityEntry.findOne({
-      where: { id },
-      relations: { category: true, user: true },
-    });
-    if (!activityEntry) throw new GraphQLError('This activity does not exist.');
-    return activityEntry;
-  }
-
-  @Authorized()
   @Mutation(() => ActivityEntry)
   async createActivityEntry(
     @Ctx() ctx: MyContext,
